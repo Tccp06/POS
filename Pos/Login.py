@@ -6,34 +6,16 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
+from qtwidgets import PasswordEdit
+#from Inicio import Ui_MainWindow as Pantalla_Inicial
+#import Inicio.py as inicio
 
-class DataBase:
-    db = pymysql.connect("localhost","root","","pos")
-    ##################################################
-
-    # prepare a cursor object using cursor() method
-    cursor = db.cursor()
-
-    # ejecuta el SQL query usando el metodo execute().
-    cursor.execute("SELECT VERSION()")
-
-    # procesa una unica linea usando el metodo fetchone().
-    data = cursor.fetchone()
-    print ("Database version : {0}".format(data))
-
-
-def validarUser(usuario,contrasena):
-    sql = 'SELECT contrasena FROM acceso WHERE Usuario = {usuario}'.format(id)
-    try:
-            self.cursor.execute(sql)
-            user = selft.cursor.fetchone()
-            if(contrasena!=user[0]):
-                print("Error")
-        #except Exception as e:
-         #   raise
-
+global usuario_local
+global contrasena_local
+global db,data
 
 
 class Ui_MainWindow(object):
@@ -67,12 +49,9 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName("label_4")
         self.usuario = QtWidgets.QTextEdit(self.centralwidget)
         self.usuario.setGeometry(QtCore.QRect(310, 210, 241, 41))
-        self.usuario.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.usuario.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.usuario.setObjectName("usuario")
-        self.contrasena = QtWidgets.QTextEdit(self.centralwidget)
-        self.contrasena.setGeometry(QtCore.QRect(310, 270, 241, 41))
-        self.contrasena.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.contrasena.setObjectName("contrasena")
         self.ingresar = QtWidgets.QPushButton(self.centralwidget)
         self.ingresar.setGeometry(QtCore.QRect(230, 390, 141, 41))
         font = QtGui.QFont()
@@ -87,6 +66,11 @@ class Ui_MainWindow(object):
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
+        self.contrasena = QtWidgets.QLineEdit(self.centralwidget)
+        self.contrasena.setGeometry(QtCore.QRect(310, 270, 241, 41))
+        self.contrasena.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.contrasena.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.contrasena.setObjectName("contrasena")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
@@ -109,6 +93,51 @@ class Ui_MainWindow(object):
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
 
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+
+
+    def verificar_usuario(self):
+        global usuario_local,contrasena_local
+        global db, data
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        cursor.execute("SELECT Usuario,Contrasena FROM acceso WHERE Usuario = '{0}' AND Contrasena = '{1}'".format(usuario_local,contrasena_local))
+
+        # procesa una unica linea usando el metodo fetchone().
+        data = cursor.fetchone()
+
+
+
+    def tomar_datos(self):
+        global usuario_local,contrasena_local
+
+        usuario_local = ui.usuario.toPlainText()
+        contrasena_local = ui.contrasena.toPlainText()
+
+
+
+
+    def login(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        global data
+
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_usuario()
+
+        if (data!=None):
+            Pantalla_Inicial.show()
+
+        else:
+            ui.label.setText(_translate("MainWindow","incorrecto"))
+#import logo_rc
 
 
 if __name__ == "__main__":
@@ -118,10 +147,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    database = DataBase()
-    database.validarUser(usuario,contrasena)
+    ui.ingresar.clicked.connect(ui.login)
     sys.exit(app.exec_())
-
-
-# desconecta del servidor
-db.close()
