@@ -8,8 +8,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import pymysql
-from qtwidgets import PasswordEdit
+import pymysql #base de datos
+#from qtwidgets import PasswordEdit
 #from Inicio import Ui_MainWindow
 #import Inicio.py as inicio
 
@@ -111,7 +111,7 @@ class Ui_MainWindow(object):
 
         # procesa una unica linea usando el metodo fetchone().
         data = cursor.fetchone()
-
+#('admin','1234')
 
 
     def tomar_datos(self):
@@ -154,4 +154,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     ui.ingresar.clicked.connect(ui.login)
+    #ui.cancelar.clicked.connect()
     sys.exit(app.exec_())
