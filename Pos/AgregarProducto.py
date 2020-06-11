@@ -8,7 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
 
+global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+global db,data
+global prodex
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -117,7 +121,45 @@ class Ui_Form(object):
         self.label_8.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt;\">Precio Unitario Compra</span></p></body></html>"))
         self.agregar.setText(_translate("Form", "Agregar"))
         self.cancelar.setText(_translate("Form", "Cancelar"))
-import logoproducto_rc
+#import logoproducto_rc
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran 
+        #o se mostrara una advertencia al usuario del caso.
+        global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+        global db, data
+        global prodex
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        cursor.execute("SELECT Nombre, Descripcion, Proveedor, PrecioUnitarioVenta, PrecioUnitarioCompra FROM producto WHERE Nombre = '{0}' AND Descripcion = '{1}' AND Proveedor ='{2}' AND PrecioUnitarioVenta = '{3}' AND PrecioUnitarioCompra = '{4}'".format(ombreloc, descripcionloc, proveedorloc, preciounven, preciouncom))
+
+        if (data != None):
+            prodex = 0
+            insertar_dato()
+        else :
+            prodex = 1
+        # procesa una unica linea usando el metodo fetchone().
+        data = cursor.fetchone()
+    
+    def insertar_dato(self):
+        #si no existe se creara uno nuevo 
+        global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+        global db, data
+        global prodex
+
+        cursor.execute("INSERT INTO producto ")
+
+    #def actualizar_dato(self):
+
+
 
 
 if __name__ == "__main__":
