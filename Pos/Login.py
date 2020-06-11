@@ -10,7 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 from qtwidgets import PasswordEdit
-#from Inicio import Ui_MainWindow as Pantalla_Inicial
+#from Inicio import Ui_MainWindow
 #import Inicio.py as inicio
 
 global usuario_local
@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
         global usuario_local,contrasena_local
 
         usuario_local = ui.usuario.toPlainText()
-        contrasena_local = ui.contrasena.toPlainText()
+        contrasena_local = ui.contrasena.text()
 
 
 
@@ -131,9 +131,15 @@ class Ui_MainWindow(object):
         ui.conectar_bdd()
         ui.tomar_datos()
         ui.verificar_usuario()
-
         if (data!=None):
-            Pantalla_Inicial.show()
+            if(data!="('admin', '1234')"):
+                print("Amonos")
+            #if(data=="")
+            #MainWindow = QtWidgets.QMainWindow()
+            #ui = Ui_MainWindow()
+            #ui.setupUi(MainWindow)
+            #MainWindow.hide()
+            #Pantalla_Inicial.show()
 
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))

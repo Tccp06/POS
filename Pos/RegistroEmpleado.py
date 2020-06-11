@@ -8,7 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
 
+global nombreloc, apellidoloc, telefonoloc, sexoloc
+global db,data
+global usex
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -38,19 +42,23 @@ class Ui_Form(object):
         self.cancelar.setObjectName("cancelar")
         self.nombre = QtWidgets.QTextEdit(Form)
         self.nombre.setGeometry(QtCore.QRect(180, 160, 191, 41))
-        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.nombre.setObjectName("nombre")
         self.apellido = QtWidgets.QTextEdit(Form)
         self.apellido.setGeometry(QtCore.QRect(180, 220, 191, 41))
-        self.apellido.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.apellido.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.apellido.setObjectName("apellido")
         self.telefono = QtWidgets.QTextEdit(Form)
         self.telefono.setGeometry(QtCore.QRect(180, 280, 191, 41))
-        self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.telefono.setObjectName("telefono")
         self.sexo = QtWidgets.QTextEdit(Form)
         self.sexo.setGeometry(QtCore.QRect(180, 340, 191, 41))
-        self.sexo.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.sexo.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.sexo.setObjectName("sexo")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(80, 160, 91, 41))
@@ -95,8 +103,42 @@ class Ui_Form(object):
         self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Apellido</span></p></body></html>"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Telefono</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
-import logoempleado_rc
+#import logoempleado_rc
 
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def verificar_usuario_existente(self):
+        global nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data
+        global usex
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        cursor.execute("SELECT Nombre,Apellido,Telefono,Sexo FROM empleado  WHERE Nombre = '{0}' AND Apellido = '{1}' AND Telefono = '{2}' AND Sexo = '{3}'".format(nombreloc, apellidoloc, telefonoloc, sexoloc))
+        # procesa una unica linea usando el metodo fetchone().
+        data = cursor.fetchone()
+        if(data!=None):
+            usex = 0
+            db.commit()
+            print("1 registro insertado, ID", cursor.lastrowid)
+        else:
+            usex = 1
+
+    def tomar_datos(self):
+        global nombreloc, apellidoloc, telefonoloc, sexoloc
+        nombreloc = ui.nombre.toPlainText()
+        apellidoloc = ui.apellido.toPlainText()
+        telefonoloc = ui.telefono.toPlainText()
+        sexoloc = ui.sexo.toPlainText()
+
+    def llamar_a_las_demas(self):
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_usuario_existente()
 
 if __name__ == "__main__":
     import sys
@@ -105,4 +147,5 @@ if __name__ == "__main__":
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())
