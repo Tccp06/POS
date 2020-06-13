@@ -12,7 +12,7 @@ import pymysql
 
 global nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
-global usex
+global usex,id
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -27,7 +27,7 @@ class Ui_Form(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.agregar = QtWidgets.QPushButton(Form)
-        self.agregar.setGeometry(QtCore.QRect(420, 490, 141, 41))
+        self.agregar.setGeometry(QtCore.QRect(420, 510, 141, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(16)
@@ -35,7 +35,7 @@ class Ui_Form(object):
         self.agregar.setStyleSheet("background-color: rgb(54, 159, 224);")
         self.agregar.setObjectName("agregar")
         self.cancelar = QtWidgets.QPushButton(Form)
-        self.cancelar.setGeometry(QtCore.QRect(610, 490, 141, 41))
+        self.cancelar.setGeometry(QtCore.QRect(610, 510, 141, 41))
         self.cancelar.setStyleSheet("background-color: rgb(247, 33, 33);\n"
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
@@ -55,11 +55,6 @@ class Ui_Form(object):
         self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);\n"
         "font: 14pt \"Bahnschrift Condensed\";")
         self.telefono.setObjectName("telefono")
-        self.sexo = QtWidgets.QTextEdit(Form)
-        self.sexo.setGeometry(QtCore.QRect(180, 340, 191, 41))
-        self.sexo.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-        "font: 14pt \"Bahnschrift Condensed\";")
-        self.sexo.setObjectName("sexo")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(80, 160, 91, 41))
         font = QtGui.QFont()
@@ -85,10 +80,21 @@ class Ui_Form(object):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(580, 0, 161, 151))
-        self.label_2.setStyleSheet("image: url(:/logo3/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
+        self.label_2.setGeometry(QtCore.QRect(580, 20, 161, 151))
+        self.label_2.setStyleSheet("image: url(:/logo3/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);\n"
+"image: url(:/logoma/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
+        self.comboBox = QtWidgets.QComboBox(Form)
+        self.comboBox.setGeometry(QtCore.QRect(180, 340, 191, 41))
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.comboBox.setFont(font)
+        self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -103,7 +109,9 @@ class Ui_Form(object):
         self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Apellido</span></p></body></html>"))
         self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Telefono</span></p></body></html>"))
         self.label_6.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
-#import logoempleado_rc
+        self.comboBox.setItemText(0, _translate("Form", "Femenino"))
+        self.comboBox.setItemText(1, _translate("Form", "Masculino"))
+#import logomodificaralmacen_rc
 
     def conectar_bdd(self):
         global db
@@ -114,31 +122,64 @@ class Ui_Form(object):
     def verificar_usuario_existente(self):
         global nombreloc, apellidoloc, telefonoloc, sexoloc
         global db, data
-        global usex
+        global usex,id
         cursor = db.cursor()
 
         # ejecuta el SQL query usando el metodo execute().
-        cursor.execute("SELECT Nombre,Apellido,Telefono,Sexo FROM empleado  WHERE Nombre = '{0}' AND Apellido = '{1}' AND Telefono = '{2}' AND Sexo = '{3}'".format(nombreloc, apellidoloc, telefonoloc, sexoloc))
+        sql = "SELECT EmpleadoId FROM empleado  WHERE Nombre=%s AND Apellido=%s AND Telefono = %s AND Sexo = %s"
+        val = (nombreloc, apellidoloc, telefonoloc, sexoloc)
         # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        myresult = cursor.fetchall()
         data = cursor.fetchone()
-        if(data!=None):
+
+        if(data==None):
             usex = 0
-            db.commit()
-            print("1 registro insertado, ID", cursor.lastrowid)
         else:
             usex = 1
+            #sql ="SELECT EmpleadoId from empleado where "
+            db.commit()
+            id=data
+            print("Existente ID")
+
+    def insertar_datos(self):
+        global nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data,usex,id
+        if(usex!=1):
+            cursor = db.cursor()
+            sql="INSERT INTO empleado (Nombre,Apellido,Telefono,Sexo) VALUES (%s,%s,%s,%s)"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE empleado SET Nombre=%s AND Apellido=%s AND Telefono=%s AND Sexo=%s WHERE EmpleadoId=%s"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc,id)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
 
     def tomar_datos(self):
         global nombreloc, apellidoloc, telefonoloc, sexoloc
         nombreloc = ui.nombre.toPlainText()
         apellidoloc = ui.apellido.toPlainText()
         telefonoloc = ui.telefono.toPlainText()
-        sexoloc = ui.sexo.toPlainText()
+        sexoloc = self.comboBox.currentText()
 
     def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
         ui.conectar_bdd()
         ui.tomar_datos()
         ui.verificar_usuario_existente()
+        ui.insertar_datos()
+        db.close()
 
 if __name__ == "__main__":
     import sys

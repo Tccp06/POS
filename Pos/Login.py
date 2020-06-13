@@ -131,6 +131,7 @@ class Ui_MainWindow(object):
         ui.conectar_bdd()
         ui.tomar_datos()
         ui.verificar_usuario()
+        db.close()
         if (data!=None):
             if(data!="('admin', '1234')"):
                 print("Amonos")

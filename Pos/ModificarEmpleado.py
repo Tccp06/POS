@@ -8,7 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
 
+global nombreloc, apellidoloc, telefonoloc, sexoloc
+global db,data
+global usex,id
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
