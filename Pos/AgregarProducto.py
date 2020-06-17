@@ -12,7 +12,7 @@ import pymysql
 
 global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
 global db,data
-global prodex
+global prodex,id
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -28,27 +28,33 @@ class Ui_Form(object):
         self.label.setObjectName("label")
         self.nombre = QtWidgets.QTextEdit(Form)
         self.nombre.setGeometry(QtCore.QRect(260, 170, 191, 41))
-        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.nombre.setObjectName("nombre")
         self.descripcion = QtWidgets.QTextEdit(Form)
         self.descripcion.setGeometry(QtCore.QRect(260, 230, 191, 41))
-        self.descripcion.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.descripcion.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.descripcion.setObjectName("descripcion")
         self.proveedor = QtWidgets.QTextEdit(Form)
         self.proveedor.setGeometry(QtCore.QRect(260, 340, 191, 41))
-        self.proveedor.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.proveedor.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.proveedor.setObjectName("proveedor")
         self.precioUnitarioVenta = QtWidgets.QTextEdit(Form)
         self.precioUnitarioVenta.setGeometry(QtCore.QRect(260, 400, 191, 41))
-        self.precioUnitarioVenta.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.precioUnitarioVenta.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.precioUnitarioVenta.setObjectName("precioUnitarioVenta")
         self.precioUnitarioCompra = QtWidgets.QTextEdit(Form)
         self.precioUnitarioCompra.setGeometry(QtCore.QRect(260, 460, 191, 41))
-        self.precioUnitarioCompra.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.precioUnitarioCompra.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.precioUnitarioCompra.setObjectName("precioUnitarioCompra")
-        self.categoria = QtWidgets.QListView(Form)
+        self.categoria =QtWidgets.QTextEdit(Form)
         self.categoria.setGeometry(QtCore.QRect(260, 280, 191, 41))
-        self.categoria.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.categoria.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.categoria.setObjectName("categoria")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(120, 170, 91, 41))
@@ -130,34 +136,75 @@ class Ui_Form(object):
         db = pymysql.connect("localhost","root","","pos")
 
     def verificar_producto_exist(self):
-        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran 
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
         #o se mostrara una advertencia al usuario del caso.
-        global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+        global nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom
         global db, data
-        global prodex
+        global prodex,id
 
         cursor = db.cursor()
 
         # ejecuta el SQL query usando el metodo execute().
-        cursor.execute("SELECT Nombre, Descripcion, Proveedor, PrecioUnitarioVenta, PrecioUnitarioCompra FROM producto WHERE Nombre = '{0}' AND Descripcion = '{1}' AND Proveedor ='{2}' AND PrecioUnitarioVenta = '{3}' AND PrecioUnitarioCompra = '{4}'".format(ombreloc, descripcionloc, proveedorloc, preciounven, preciouncom))
+        sql = "SELECT ProductoId FROM producto WHERE Nombre = %s AND Descripcion = %s AND CategoriaId=%s AND ProveedorId =%s AND PrecioUnitarioVenta = %s AND PrecioUnitarioCompra = %s"
+        val = (nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom)
 
-        if (data != None):
-            prodex = 0
-            insertar_dato()
-        else :
-            prodex = 1
-        # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        #myresult = cursor.fetchall()
         data = cursor.fetchone()
-    
+
+        if(data==None):
+            prodex = 0
+        else:
+            prodex = 1
+            #sql ="SELECT EmpleadoId from empleado where "
+            db.commit()
+            id=data
+            print("Existente ID")
+
     def insertar_dato(self):
-        #si no existe se creara uno nuevo 
-        global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+
+        global nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom
         global db, data
-        global prodex
+        global prodex,id
 
-        cursor.execute("INSERT INTO producto ")
+        if(prodex!=1): #si no existe se creara uno nuevo
+            cursor = db.cursor()
+            sql="INSERT INTO producto (Nombre, Descripcion, CategoriaId,ProveedorId, PrecioUnitarioVenta, PrecioUnitarioCompra) VALUES (%s,%s,%s,%s,%s,%s)"
+            val = (nombreloc, descripcionloc,categorialoc, proveedorloc, preciounven, preciouncom)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE producto SET Nombre = %s AND Descripcion = %s AND CategoriaId=%s AND ProveedorId =%s AND PrecioUnitarioVenta = %s AND PrecioUnitarioCompra = %s WHERE ProductoId=%s"
+            val = (nombreloc, descripcionloc,categorialoc, proveedorloc, preciounven,  preciouncom, id)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
 
-    #def actualizar_dato(self):
+            print("Actualizado")
+
+    def tomar_datos(self):
+        global nombreloc, descripcionloc, categorialoc,proveedorloc, preciounven, preciouncom
+
+        nombreloc = ui.nombre.toPlainText()
+        descripcionloc = ui.descripcion.toPlainText()
+        categorialoc = ui.categoria.toPlainText()
+        proveedorloc = ui.proveedor.toPlainText()
+        preciounven = ui.precioUnitarioVenta.toPlainText()
+        preciouncom = ui.precioUnitarioVenta.toPlainText()
+
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_producto_exist()
+        ui.insertar_dato()
+        db.close()
 
 
 
@@ -169,4 +216,5 @@ if __name__ == "__main__":
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

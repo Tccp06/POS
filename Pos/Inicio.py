@@ -104,7 +104,7 @@ class Ui_Form(object):
         self.inventario.setText(_translate("Form", "Inventario"))
         self.cerrarCaja.setText(_translate("Form", "Cerrar Caja"))
         self.registrarEmpleado.setText(_translate("Form", "Registrar Empleado"))
-import iniciologo_rc
+#import iniciologo_rc
 
 
 if __name__ == "__main__":

@@ -8,10 +8,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import pymysql #base de datos
-#from qtwidgets import PasswordEdit
-#from Inicio import Ui_MainWindow
-#import Inicio.py as inicio
+import pymysql
+import Inicio
 
 global usuario_local
 global contrasena_local
@@ -120,6 +118,14 @@ class Ui_MainWindow(object):
         usuario_local = ui.usuario.toPlainText()
         contrasena_local = ui.contrasena.text()
 
+    def abrir_siguiente(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = Inicio.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+
 
 
 
@@ -134,17 +140,10 @@ class Ui_MainWindow(object):
         db.close()
         if (data!=None):
             if(data!="('admin', '1234')"):
-                print("Amonos")
-            #if(data=="")
-            #MainWindow = QtWidgets.QMainWindow()
-            #ui = Ui_MainWindow()
-            #ui.setupUi(MainWindow)
-            #MainWindow.hide()
-            #Pantalla_Inicial.show()
-
+                ui.abrir_siguiente()
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))
-#import logo_rc
+#import logo
 
 
 if __name__ == "__main__":

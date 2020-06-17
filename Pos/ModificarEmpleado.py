@@ -10,9 +10,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 
-global nombreloc, apellidoloc, telefonoloc, sexoloc
+global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
-global usex,id
+global usex
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -23,7 +23,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.id = QtWidgets.QTextEdit(self.centralwidget)
         self.id.setGeometry(QtCore.QRect(220, 120, 191, 41))
-        self.id.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.id.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.id.setObjectName("id")
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setGeometry(QtCore.QRect(70, 120, 121, 41))
@@ -39,11 +40,13 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName("label_3")
         self.apellido = QtWidgets.QTextEdit(self.centralwidget)
         self.apellido.setGeometry(QtCore.QRect(220, 220, 191, 41))
-        self.apellido.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.apellido.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.apellido.setObjectName("apellido")
         self.nombre = QtWidgets.QTextEdit(self.centralwidget)
         self.nombre.setGeometry(QtCore.QRect(220, 170, 191, 41))
-        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.nombre.setObjectName("nombre")
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(180, 10, 301, 91))
@@ -78,10 +81,6 @@ class Ui_MainWindow(object):
         font.setFamily("Bahnschrift Condensed")
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
-        self.sexo = QtWidgets.QTextEdit(self.centralwidget)
-        self.sexo.setGeometry(QtCore.QRect(220, 330, 191, 41))
-        self.sexo.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.sexo.setObjectName("sexo")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(140, 320, 61, 41))
         font = QtGui.QFont()
@@ -95,7 +94,8 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName("label_2")
         self.telefono = QtWidgets.QTextEdit(self.centralwidget)
         self.telefono.setGeometry(QtCore.QRect(220, 270, 191, 41))
-        self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.telefono.setObjectName("telefono")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -105,6 +105,16 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.comboBox = QtWidgets.QComboBox(MainWindow)
+        self.comboBox.setGeometry(QtCore.QRect(220, 330, 191, 41))
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.comboBox.setFont(font)
+        self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -120,8 +130,76 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Apellido</span></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Teléfono</span></p></body></html>"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
-import logomodificaralmacen_rc
+        self.comboBox.setItemText(0, _translate("MainWindow", "Femenino"))
+        self.comboBox.setItemText(1, _translate("MainWindow", "Masculino"))
+#import logomodificaralmacen_rc
 
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def verificar_usuario_existente(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data
+        global usex
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT EmpleadoId FROM empleado  WHERE EmpleadoId=%s"
+        val = (idloc)
+        # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        data = cursor.fetchone()
+
+        if(data==None):
+            usex = 0
+        else:
+            usex = 1
+            db.commit()
+            print("Existente ID")
+
+    def insertar_datos(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data,usex
+        if(usex!=1):
+            cursor = db.cursor()
+            sql="INSERT INTO empleado (Nombre,Apellido,Telefono,Sexo) VALUES (%s,%s,%s,%s)"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE empleado SET Nombre=%s, Apellido=%s, Telefono=%s, Sexo=%s WHERE EmpleadoId=%s"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc,idloc)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
+
+    def tomar_datos(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        idloc = ui.id.toPlainText()
+        nombreloc = ui.nombre.toPlainText()
+        apellidoloc = ui.apellido.toPlainText()
+        telefonoloc = ui.telefono.toPlainText()
+        sexoloc = self.comboBox.currentText()
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_usuario_existente()
+        ui.insertar_datos()
+        db.close()
 
 if __name__ == "__main__":
     import sys
@@ -130,4 +208,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())
