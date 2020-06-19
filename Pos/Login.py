@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 import Inicio
+import logo
 
 global usuario_local
 global contrasena_local
@@ -143,7 +144,7 @@ class Ui_MainWindow(object):
                 ui.abrir_siguiente()
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))
-#import logo
+
 
 
 if __name__ == "__main__":
