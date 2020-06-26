@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
+import logolistadoproveedor
 
 global nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
@@ -111,7 +112,7 @@ class Ui_Form(object):
         self.label_6.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
         self.comboBox.setItemText(0, _translate("Form", "Femenino"))
         self.comboBox.setItemText(1, _translate("Form", "Masculino"))
-#import logomodificaralmacen_rc
+
 
     def conectar_bdd(self):
         global db

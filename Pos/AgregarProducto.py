@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
+import logoproducto
 
 global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
 global db,data
@@ -127,7 +128,6 @@ class Ui_Form(object):
         self.label_8.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:16pt;\">Precio Unitario Compra</span></p></body></html>"))
         self.agregar.setText(_translate("Form", "Agregar"))
         self.cancelar.setText(_translate("Form", "Cancelar"))
-#import logoproducto_rc
 
     def conectar_bdd(self):
         global db
