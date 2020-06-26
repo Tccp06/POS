@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
         self.comboBox.setItemText(0, _translate("MainWindow", "Femenino"))
         self.comboBox.setItemText(1, _translate("MainWindow", "Masculino"))
-#import logomodificaralmacen_rc
+import logomodificaralmacen_rc
 
     def conectar_bdd(self):
         global db

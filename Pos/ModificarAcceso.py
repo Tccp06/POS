@@ -8,6 +8,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import logomodificarproveedor
+import pymysql
+
+global idloc,usuarioloc, contrasenaloc
+global db,data
+global acex
 
 
 class Ui_MainWindow(object):
@@ -94,7 +100,70 @@ class Ui_MainWindow(object):
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
         self.agregar.setText(_translate("MainWindow", "Agregar"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Contraseña</span></p></body></html>"))
-import logomodificaracceso_rc
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def verificar_acceso_existente(self):
+        global idloc,usuarioloc, contrasenaloc
+        global db, data
+        global acex
+
+        cursor = db.cursor()
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT EmpleadoId FROM empleado  WHERE EmpleadoId=%s"
+        val = (idloc)
+        # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        data = cursor.fetchone()
+
+        if(data==None):
+            usex = 0
+        else:
+            acex = 1
+            db.commit()
+            print("Existente ID")
+
+    def insertar_datos(self):
+        global idloc,usuarioloc, contrasenaloc
+        global db, data,acex
+        if(acex!=1):
+            cursor = db.cursor()
+            sql="INSERT INTO empleado (EmpleadoId,Usuario, Contrasena) VALUES (%s,%s,%s)"
+            val = (idloc,usuarioloc, contrasenaloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE acceso SET EmpleadoID=%s, Usuario=%s, Contrasena=%s WHERE EmpleadoId=%s"
+            val = (idloc,usuarioloc, contrasenaloc)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
+
+    def tomar_datos(self):
+        global idloc,usuarioloc, contrasenaloc
+        idloc = ui.id.toPlainText()
+        usuarioloc = ui.usuario.toPlainText()
+        contraenaloc = ui.contrasena.toPlainText()
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_acceso_existente()
+        ui.insertar_datos()
+        db.close()
 
 
 if __name__ == "__main__":
@@ -104,4 +173,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())
