@@ -8,8 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
 
-
+global idLocal, fechaLocal
+global db, data
+global prodex,id_
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -108,6 +111,44 @@ class Ui_MainWindow(object):
         self.agregar.setText(_translate("MainWindow", "Buscar"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">ID</span></p></body></html>"))
 #import logobuscarcompra_rc
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+    
+    def tomar_datos(self):
+        global idLocal, fechaLocal
+
+        idLocal = ui.ID.toPlainText()
+        fechaLocal = ui.nombre.toPlainText()
+    
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global idLocal, fechaLocal
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT CompraId, ProductoId, CantidadProducto, NumeroDeArticulos, Total FROM detallecompra WHERE CompraId = %s"
+        val = (idLocal)
+
+        cursor.execute(sql, val)
+
+        #myresult = cursor.fetchall()
+        data = cursor.fetchone()
+
+        if(data==None):
+            prodex = 0
+            print("Esta compra nunca fue hecha")
+        else:
+            prodex = 1
+            #sql ="SELECT EmpleadoId from empleado where "
+            db.commit()
+            id_=data
+            print("Ahi stan los datos")
+            #Imprimir tabla
 
 
 if __name__ == "__main__":
