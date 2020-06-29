@@ -32,7 +32,8 @@ class Ui_MainWindow(object):
         self.label.setObjectName("label")
         self.id = QtWidgets.QTextEdit(self.centralwidget)
         self.id.setGeometry(QtCore.QRect(300, 170, 191, 41))
-        self.id.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.id.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.id.setObjectName("id")
         self.label_9 = QtWidgets.QLabel(self.centralwidget)
         self.label_9.setGeometry(QtCore.QRect(170, 170, 121, 41))
@@ -67,7 +68,8 @@ class Ui_MainWindow(object):
         self.agregar.setObjectName("agregar")
         self.usuario = QtWidgets.QTextEdit(self.centralwidget)
         self.usuario.setGeometry(QtCore.QRect(300, 220, 191, 41))
-        self.usuario.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.usuario.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.usuario.setObjectName("usuario")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(160, 280, 121, 41))
@@ -77,7 +79,8 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName("label_4")
         self.contrasena = QtWidgets.QTextEdit(self.centralwidget)
         self.contrasena.setGeometry(QtCore.QRect(300, 280, 191, 41))
-        self.contrasena.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.contrasena.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        "font: 14pt \"Bahnschrift Condensed\";")
         self.contrasena.setObjectName("contrasena")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -105,7 +108,7 @@ class Ui_MainWindow(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_acceso_existente(self):
         global idloc,usuarioloc, contrasenaloc
@@ -114,7 +117,7 @@ class Ui_MainWindow(object):
 
         cursor = db.cursor()
         # ejecuta el SQL query usando el metodo execute().
-        sql = "SELECT EmpleadoId FROM empleado  WHERE EmpleadoId=%s"
+        sql = "SELECT EmpleadoId FROM acceso  WHERE EmpleadoId=%s"
         val = (idloc)
         # procesa una unica linea usando el metodo fetchone().
         cursor.execute(sql, val)
@@ -122,7 +125,7 @@ class Ui_MainWindow(object):
         data = cursor.fetchone()
 
         if(data==None):
-            usex = 0
+            acex = 0
         else:
             acex = 1
             db.commit()
@@ -133,7 +136,7 @@ class Ui_MainWindow(object):
         global db, data,acex
         if(acex!=1):
             cursor = db.cursor()
-            sql="INSERT INTO empleado (EmpleadoId,Usuario, Contrasena) VALUES (%s,%s,%s)"
+            sql="INSERT INTO acceso (EmpleadoId,Usuario, Contrasena) VALUES (%s,%s,%s)"
             val = (idloc,usuarioloc, contrasenaloc)
             cursor.execute(sql,val)
             data = cursor.fetchone()
@@ -141,8 +144,8 @@ class Ui_MainWindow(object):
             print(cursor.rowcount, "record inserted.")
         else:
             cursor = db.cursor()
-            sql="UPDATE acceso SET EmpleadoID=%s, Usuario=%s, Contrasena=%s WHERE EmpleadoId=%s"
-            val = (idloc,usuarioloc, contrasenaloc)
+            sql="UPDATE acceso SET EmpleadoId=%s, Usuario=%s, Contrasena=%s WHERE EmpleadoId=%s"
+            val = (idloc,usuarioloc, contrasenaloc,idloc)
             cursor.execute(sql,val)
             db.commit()
             data = cursor.fetchone()
@@ -154,7 +157,7 @@ class Ui_MainWindow(object):
         global idloc,usuarioloc, contrasenaloc
         idloc = ui.id.toPlainText()
         usuarioloc = ui.usuario.toPlainText()
-        contraenaloc = ui.contrasena.toPlainText()
+        contrasenaloc = ui.contrasena.toPlainText()
 
     def llamar_a_las_demas(self):
         _translate = QtCore.QCoreApplication.translate

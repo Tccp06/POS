@@ -138,7 +138,7 @@ import logomodificaralmacen_rc
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_usuario_existente(self):
         global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc

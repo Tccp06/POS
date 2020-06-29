@@ -119,7 +119,7 @@ class Ui_MainWindow(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_proveedor_exist(self):
         #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran

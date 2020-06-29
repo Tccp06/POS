@@ -118,7 +118,7 @@ class Ui_Form(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_usuario_existente(self):
         global nombreloc, apellidoloc, telefonoloc, sexoloc
