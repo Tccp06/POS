@@ -9,6 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
+import InicioAdmin
 
 global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
@@ -200,7 +201,16 @@ import logomodificaralmacen_rc
         ui.verificar_usuario_existente()
         ui.insertar_datos()
         db.close()
+           ui.regresar_menu()
 
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+        
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

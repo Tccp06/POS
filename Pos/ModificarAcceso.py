@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import logomodificarproveedor
 import pymysql
+import InicioAdmin
 
 global idloc,usuarioloc, contrasenaloc
 global db,data
@@ -167,6 +168,14 @@ class Ui_MainWindow(object):
         ui.verificar_acceso_existente()
         ui.insertar_datos()
         db.close()
+        ui.regresar_menu()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
