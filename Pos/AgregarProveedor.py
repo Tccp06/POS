@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 import logoproveedor
+import InicioAdmin
 
 global nombreloc, direccionloc, telefonoloc, empresaloc
 global db,data
@@ -119,7 +120,7 @@ class Ui_MainWindow(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_proveedor_exist(self):
         #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
@@ -190,6 +191,13 @@ class Ui_MainWindow(object):
         ui.verificar_proveedor_exist()
         ui.insertar_dato()
         db.close()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
 
 if __name__ == "__main__":
     import sys

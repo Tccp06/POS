@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 import logoproducto
+import InicioAdmin
 
 global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
 global db,data
@@ -133,7 +134,7 @@ class Ui_Form(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
     def verificar_producto_exist(self):
         #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
@@ -176,6 +177,7 @@ class Ui_Form(object):
             data = cursor.fetchone()
             db.commit()
             print(cursor.rowcount, "record inserted.")
+            ui.regresar_menu()
         else:
             cursor = db.cursor()
             sql="UPDATE producto SET Nombre = %s AND Descripcion = %s AND CategoriaId=%s AND ProveedorId =%s AND PrecioUnitarioVenta = %s AND PrecioUnitarioCompra = %s WHERE ProductoId=%s"
@@ -185,6 +187,7 @@ class Ui_Form(object):
             data = cursor.fetchone()
 
             print("Actualizado")
+            ui.regresar_menu()
 
     def tomar_datos(self):
         global nombreloc, descripcionloc, categorialoc,proveedorloc, preciounven, preciouncom
@@ -206,6 +209,12 @@ class Ui_Form(object):
         ui.insertar_dato()
         db.close()
 
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        Form.hide()
 
 
 

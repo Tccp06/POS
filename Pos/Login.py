@@ -9,7 +9,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
-import Inicio
+import InicioAdmin
 import logo
 
 global usuario_local
@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos")
+        db = pymysql.connect("localhost","root","","pos2")
 
 
 
@@ -119,9 +119,16 @@ class Ui_MainWindow(object):
         usuario_local = ui.usuario.toPlainText()
         contrasena_local = ui.contrasena.text()
 
-    def abrir_siguiente(self):
+    def abrir_admin(self):
         self.Form = QtWidgets.QWidget()
-        self.ui = Inicio.Ui_Form()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+    def abrir_empleado(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
         self.ui.setupUi(self.Form)
         self.Form.show()
         MainWindow.hide()
@@ -141,7 +148,7 @@ class Ui_MainWindow(object):
         db.close()
         if (data!=None):
             if(data!="('admin', '1234')"):
-                ui.abrir_siguiente()
+                ui.abrir_admin()
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))
 
