@@ -1,0 +1,125 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'InicioEmpleado.ui'
+#
+# Created by: PyQt5 UI code generator 5.14.2
+#
+# WARNING! All changes made in this file will be lost!
+
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(800, 600)
+        MainWindow.setStyleSheet("background-color: rgb(157, 155, 155);\n"
+"")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.centralwidget.setObjectName("centralwidget")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(290, 90, 201, 211))
+        self.label_2.setStyleSheet("image: url(:/logoxd/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
+        self.label_2.setText("")
+        self.label_2.setObjectName("label_2")
+        self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(540, 60, 231, 441))
+        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.agregar = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.agregar.setFont(font)
+        self.agregar.setStyleSheet("background-color: rgb(54, 159, 224);")
+        self.agregar.setObjectName("agregar")
+        self.verticalLayout.addWidget(self.agregar)
+        self.buscar = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.buscar.setFont(font)
+        self.buscar.setStyleSheet("background-color: rgb(54, 159, 224);")
+        self.buscar.setObjectName("buscar")
+        self.verticalLayout.addWidget(self.buscar)
+        self.listado = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.listado.setFont(font)
+        self.listado.setStyleSheet("background-color: rgb(54, 159, 224);")
+        self.listado.setObjectName("listado")
+        self.verticalLayout.addWidget(self.listado)
+        self.verticalLayoutWidget_2 = QtWidgets.QWidget(self.centralwidget)
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(60, 80, 211, 421))
+        self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.ventaProducto = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.ventaProducto.setFont(font)
+        self.ventaProducto.setStyleSheet("background-color: rgb(25, 240, 97);")
+        self.ventaProducto.setObjectName("ventaProducto")
+        self.verticalLayout_2.addWidget(self.ventaProducto)
+        self.modificarProducto = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.modificarProducto.setFont(font)
+        self.modificarProducto.setStyleSheet("background-color: rgb(54, 159, 224);")
+        self.modificarProducto.setObjectName("modificarProducto")
+        self.verticalLayout_2.addWidget(self.modificarProducto)
+        self.inventario = QtWidgets.QPushButton(self.verticalLayoutWidget_2)
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(14)
+        self.inventario.setFont(font)
+        self.inventario.setStyleSheet("background-color: rgb(54, 159, 224);")
+        self.inventario.setObjectName("inventario")
+        self.verticalLayout_2.addWidget(self.inventario)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(280, -10, 251, 91))
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        font.setPointSize(26)
+        self.label.setFont(font)
+        self.label.setObjectName("label")
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
+
+        self.retranslateUi(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.agregar.setText(_translate("MainWindow", "Agregar "))
+        self.buscar.setText(_translate("MainWindow", "Buscar "))
+        self.listado.setText(_translate("MainWindow", "Listado"))
+        self.ventaProducto.setText(_translate("MainWindow", "Venta de Producto"))
+        self.modificarProducto.setText(_translate("MainWindow", "Modificar "))
+        self.inventario.setText(_translate("MainWindow", "Inventario"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:36pt; font-weight:600;\">Bienvenido </span></p></body></html>"))
+import logoinicio2_rc
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
