@@ -13,23 +13,23 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(753, 600)
-        MainWindow.setStyleSheet("background-color: rgb(247, 255, 247);")
+        MainWindow.resize(800, 600)
+        MainWindow.setStyleSheet("background-color: rgb(157, 155, 155);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(10, 500, 111, 61))
+        self.label_2.setGeometry(QtCore.QRect(610, 0, 121, 81))
         self.label_2.setStyleSheet("image: url(:/logo16/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
         self.cancelar = QtWidgets.QPushButton(self.centralwidget)
-        self.cancelar.setGeometry(QtCore.QRect(550, 500, 141, 41))
+        self.cancelar.setGeometry(QtCore.QRect(600, 500, 141, 41))
         self.cancelar.setStyleSheet("background-color: rgb(247, 33, 33);\n"
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(50, 0, 381, 91))
+        self.label.setGeometry(QtCore.QRect(250, 0, 281, 91))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(26)
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
         self.tableView.setObjectName("tableView")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 753, 26))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -54,8 +54,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.cancelar.setText(_translate("MainWindow", "Ok"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p>Acerca de los proveedores</p></body></html>"))
+        self.cancelar.setText(_translate("MainWindow", "Atrás"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p>Listado Proveedor</p></body></html>"))
 import logolistadoproveedor_rc
 
 

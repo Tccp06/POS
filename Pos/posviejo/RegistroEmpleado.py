@@ -10,7 +10,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import pymysql
 import logolistadoproveedor
-import logomodificaralmacen
 
 global nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
@@ -19,77 +18,76 @@ global usex,id
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(411, 514)
-        Form.setStyleSheet("background-color: rgb(247, 255, 247);")
+        Form.resize(790, 588)
+        Form.setStyleSheet("background-color: rgb(157, 155, 155);")
         self.label = QtWidgets.QLabel(Form)
-        self.label.setGeometry(QtCore.QRect(110, 60, 221, 61))
+        self.label.setGeometry(QtCore.QRect(240, 20, 281, 91))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(26)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.agregar = QtWidgets.QPushButton(Form)
-        self.agregar.setGeometry(QtCore.QRect(130, 340, 141, 41))
+        self.agregar.setGeometry(QtCore.QRect(420, 510, 141, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(16)
         self.agregar.setFont(font)
-        self.agregar.setStyleSheet("background-color: rgb(255, 230, 109);\n"
-"")
+        self.agregar.setStyleSheet("background-color: rgb(54, 159, 224);")
         self.agregar.setObjectName("agregar")
         self.cancelar = QtWidgets.QPushButton(Form)
-        self.cancelar.setGeometry(QtCore.QRect(130, 400, 141, 41))
+        self.cancelar.setGeometry(QtCore.QRect(610, 510, 141, 41))
         self.cancelar.setStyleSheet("background-color: rgb(247, 33, 33);\n"
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
         self.nombre = QtWidgets.QTextEdit(Form)
-        self.nombre.setGeometry(QtCore.QRect(120, 130, 181, 31))
+        self.nombre.setGeometry(QtCore.QRect(180, 160, 191, 41))
         self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);\n"
         "font: 14pt \"Bahnschrift Condensed\";")
         self.nombre.setObjectName("nombre")
         self.apellido = QtWidgets.QTextEdit(Form)
-        self.apellido.setGeometry(QtCore.QRect(120, 180, 181, 31))
+        self.apellido.setGeometry(QtCore.QRect(180, 220, 191, 41))
         self.apellido.setStyleSheet("background-color: rgb(255, 255, 255);\n"
         "font: 14pt \"Bahnschrift Condensed\";")
         self.apellido.setObjectName("apellido")
         self.telefono = QtWidgets.QTextEdit(Form)
-        self.telefono.setGeometry(QtCore.QRect(120, 230, 181, 31))
+        self.telefono.setGeometry(QtCore.QRect(180, 280, 191, 41))
         self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);\n"
         "font: 14pt \"Bahnschrift Condensed\";")
         self.telefono.setObjectName("telefono")
         self.label_3 = QtWidgets.QLabel(Form)
-        self.label_3.setGeometry(QtCore.QRect(40, 120, 71, 41))
+        self.label_3.setGeometry(QtCore.QRect(80, 160, 91, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(50, 170, 61, 41))
+        self.label_4.setGeometry(QtCore.QRect(80, 220, 91, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(Form)
-        self.label_5.setGeometry(QtCore.QRect(50, 220, 61, 41))
+        self.label_5.setGeometry(QtCore.QRect(80, 280, 91, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.label_6 = QtWidgets.QLabel(Form)
-        self.label_6.setGeometry(QtCore.QRect(70, 270, 41, 41))
+        self.label_6.setGeometry(QtCore.QRect(100, 340, 61, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.label_2 = QtWidgets.QLabel(Form)
-        self.label_2.setGeometry(QtCore.QRect(10, 10, 101, 81))
+        self.label_2.setGeometry(QtCore.QRect(580, 20, 161, 151))
         self.label_2.setStyleSheet("image: url(:/logo3/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);\n"
 "image: url(:/logoma/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
         self.comboBox = QtWidgets.QComboBox(Form)
-        self.comboBox.setGeometry(QtCore.QRect(120, 280, 181, 31))
+        self.comboBox.setGeometry(QtCore.QRect(180, 340, 191, 41))
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(14)
@@ -105,15 +103,16 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:20pt;\">Registrar empleado</span></p></body></html>"))
-        self.agregar.setText(_translate("Form", "Registrar"))
+        self.label.setText(_translate("Form", "<html><head/><body><p>Registro Empleado</p></body></html>"))
+        self.agregar.setText(_translate("Form", "Agregar"))
         self.cancelar.setText(_translate("Form", "Cancelar"))
-        self.label_3.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt;\">Nombre(s)</span></p></body></html>"))
-        self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt;\">Apellidos</span></p></body></html>"))
-        self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt;\">Telefono</span></p></body></html>"))
-        self.label_6.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt;\">Sexo</span></p></body></html>"))
+        self.label_3.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Nombre</span></p></body></html>"))
+        self.label_4.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Apellido</span></p></body></html>"))
+        self.label_5.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Telefono</span></p></body></html>"))
+        self.label_6.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:18pt;\">Sexo</span></p></body></html>"))
         self.comboBox.setItemText(0, _translate("Form", "Femenino"))
         self.comboBox.setItemText(1, _translate("Form", "Masculino"))
+
 
     def conectar_bdd(self):
         global db
@@ -183,10 +182,6 @@ class Ui_Form(object):
         ui.insertar_datos()
         db.close()
 
-    def cambiar_ventana(self):
-            
-
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -195,5 +190,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     ui.agregar.clicked.connect(ui.llamar_a_las_demas)
-    ui.
     sys.exit(app.exec_())
