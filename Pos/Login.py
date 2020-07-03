@@ -84,6 +84,10 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Contraseña</span></p></body></html>"))
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
+<<<<<<< HEAD
+#import logo_rc
+=======
+>>>>>>> 4536427a4cc3d91afee32180d3ca18cce0da6090
 
     def conectar_bdd(self):
         global db

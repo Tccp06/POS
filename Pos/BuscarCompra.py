@@ -8,7 +8,11 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
 
+global idLocal, fechaLocal
+global db, data
+global prodex,id_
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -18,28 +22,35 @@ class Ui_MainWindow(object):
 "background-color: rgb(247, 255, 247);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        
         self.ID = QtWidgets.QTextEdit(self.centralwidget)
         self.ID.setGeometry(QtCore.QRect(140, 80, 191, 31))
         self.ID.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.ID.setObjectName("ID")
+
         self.cancelar = QtWidgets.QPushButton(self.centralwidget)
         self.cancelar.setGeometry(QtCore.QRect(410, 400, 141, 41))
         self.cancelar.setStyleSheet("background-color: rgb(247, 33, 33);\n"
+
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
+
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setGeometry(QtCore.QRect(40, 140, 521, 231))
         self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.tableView.setObjectName("tableView")
+
         self.agregar = QtWidgets.QPushButton(self.centralwidget)
         self.agregar.setGeometry(QtCore.QRect(350, 80, 111, 41))
+
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(16)
         self.agregar.setFont(font)
         self.agregar.setStyleSheet("background-color: rgb(255, 230, 109);")
         self.agregar.setObjectName("agregar")
+
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(40, 70, 91, 41))
         font = QtGui.QFont()
@@ -69,8 +80,46 @@ class Ui_MainWindow(object):
         self.cancelar.setText(_translate("MainWindow", "Atrás"))
         self.agregar.setText(_translate("MainWindow", "Buscar"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID de compra</span></p></body></html>"))
-import logobuscarcompra_rc
+#import logobuscarcompra_rc
 
+def conectar_bdd(self):
+    global db
+    ############### CONFIGURAR ESTO ###################
+    # Abre conexion con la base de datos
+    db = pymysql.connect("localhost","root","","pos")
+    
+def tomar_datos(self):
+    global idLocal, fechaLocal
+
+    idLocal = ui.ID.toPlainText()
+
+def verificar_producto_exist(self):
+    #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+    #o se mostrara una advertencia al usuario del caso.
+    global idLocal
+
+    cursor = db.cursor()
+
+    # ejecuta el SQL query usando el metodo execute().
+    sql = "SELECT CompraId, ProductoId, CantidadProducto, NumeroDeArticulos, Total FROM detallecompra WHERE CompraId = %s"
+    val = (idLocal)
+
+    cursor.execute(sql, val)
+
+    #myresult = cursor.fetchall()
+    data = cursor.fetchone()
+
+    if(data==None):
+        prodex = 0
+        print("Esta compra nunca fue hecha")
+        print(data)
+    else:
+        prodex = 1
+        #sql ="SELECT EmpleadoId from empleado where "
+        db.commit()
+        id_=data
+        print("Ahi stan los datos")
+        #Imprimir tabla
 
 if __name__ == "__main__":
     import sys
