@@ -77,7 +77,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Contraseña</span></p></body></html>"))
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
-import logo_rc
+#import logo_rc
 
 
 if __name__ == "__main__":
