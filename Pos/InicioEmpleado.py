@@ -9,15 +9,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import Vender
+import logoinicio2
 
-class Ui_MainWindow(object):
+class Ui_MainWindowEmpleado(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(799, 595)
-        MainWindow.setStyleSheet("background-color: rgb(247, 255, 247);\n"
-"\n"
-"\n"
-"")
+        MainWindow.setStyleSheet("background-color: rgb(247, 255, 247);\n")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
@@ -131,14 +130,21 @@ class Ui_MainWindow(object):
         self.ventaProducto.setText(_translate("MainWindow", "Vender"))
         self.buscar.setText(_translate("MainWindow", "Buscar "))
         self.cerrarCaja.setText(_translate("MainWindow", "Menu"))
-import logoinicio2_rc
+
+    def vender(self):
+        self.MainWindow3 = QtWidgets.QMainWindow()
+        self.ui =Vender.Ui_VenderWindow()
+        self.ui.setupUi(self.MainWindow3)
+        self.MainWindow3.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_MainWindowEmpleado()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.ventaProducto.clicked.connect(ui.vender)
     sys.exit(app.exec_())

@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import iniciologo
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -120,7 +120,7 @@ class Ui_Form(object):
         self.agregar.setText(_translate("Form", "Agregar "))
         self.modificarProducto.setText(_translate("Form", "Editar"))
         self.inventario.setText(_translate("Form", "Inventario"))
-import iniciologo_rc
+
 
 
 if __name__ == "__main__":

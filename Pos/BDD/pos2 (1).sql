@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 29-06-2020 a las 23:02:20
+-- Tiempo de generación: 03-07-2020 a las 01:46:12
 -- Versión del servidor: 5.5.24-log
 -- Versión de PHP: 5.4.3
 
@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `acceso` (
 --
 
 INSERT INTO `acceso` (`EmpleadoId`, `Usuario`, `Contrasena`) VALUES
-(1, 'admin', '1234');
+(1, 'admin', '1234'),
+(2, 'pancho', '1234');
 
 -- --------------------------------------------------------
 
@@ -51,6 +52,14 @@ CREATE TABLE IF NOT EXISTS `almacen` (
   `CantidadProducto` int(5) NOT NULL,
   KEY `ProductoId` (`ProductoId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `almacen`
+--
+
+INSERT INTO `almacen` (`ProductoId`, `CantidadProducto`) VALUES
+(2, 50),
+(2, 50);
 
 -- --------------------------------------------------------
 
@@ -83,7 +92,15 @@ CREATE TABLE IF NOT EXISTS `compra` (
   `CompraId` int(11) NOT NULL AUTO_INCREMENT,
   `Fecha` date NOT NULL,
   PRIMARY KEY (`CompraId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Volcado de datos para la tabla `compra`
+--
+
+INSERT INTO `compra` (`CompraId`, `Fecha`) VALUES
+(1, '0000-00-00'),
+(2, '2010-02-07');
 
 -- --------------------------------------------------------
 
@@ -101,6 +118,13 @@ CREATE TABLE IF NOT EXISTS `detallecompra` (
   KEY `CompraId` (`CompraId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `detallecompra`
+--
+
+INSERT INTO `detallecompra` (`CompraId`, `ProductoId`, `CantidadProducto`, `NumeroDeArticulos`, `Total`) VALUES
+(2, 2, 2, 2, 20);
+
 -- --------------------------------------------------------
 
 --
@@ -114,14 +138,15 @@ CREATE TABLE IF NOT EXISTS `empleado` (
   `Telefono` int(15) NOT NULL,
   `Sexo` varchar(10) NOT NULL,
   PRIMARY KEY (`EmpleadoId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `empleado`
 --
 
 INSERT INTO `empleado` (`EmpleadoId`, `Nombre`, `Apellido`, `Telefono`, `Sexo`) VALUES
-(1, 'admin', 'admin', 123456, 'Femenino');
+(1, 'admin', 'admin', 123456, 'Femenino'),
+(2, 'prueba', 'preuba', 1234, 'Masculino');
 
 -- --------------------------------------------------------
 

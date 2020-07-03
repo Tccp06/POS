@@ -8,7 +8,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
+import InicioAdmin
+import InicioEmpleado
+import logo
 
+global usuario_local
+global contrasena_local
+global db,data
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -77,8 +84,70 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Contraseña</span></p></body></html>"))
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
+<<<<<<< HEAD
 #import logo_rc
+=======
+>>>>>>> 4536427a4cc3d91afee32180d3ca18cce0da6090
 
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+
+
+    def verificar_usuario(self):
+        global usuario_local,contrasena_local
+        global db, data
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        cursor.execute("SELECT Usuario,Contrasena FROM acceso WHERE Usuario = '{0}' AND Contrasena = '{1}'".format(usuario_local,contrasena_local))
+
+        # procesa una unica linea usando el metodo fetchone().
+        data = cursor.fetchone()
+
+#('admin','1234')
+
+
+    def tomar_datos(self):
+        global usuario_local,contrasena_local
+
+        usuario_local = ui.usuario.toPlainText()
+        contrasena_local = ui.contrasena.text()
+
+    def abrir_admin(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+    def abrir_empleado(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        MainWindow.hide()
+
+
+    def login(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        global data
+
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_usuario()
+        if (data!=None):
+            if(data=="('admin', '1234')"):
+                ui.abrir_admin()
+            else:
+                ui.abrir_empleado()
+        else:
+            ui.label.setText(_translate("MainWindow","incorrecto"))
+        db.close()
 
 if __name__ == "__main__":
     import sys
@@ -87,4 +156,6 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.ingresar.clicked.connect(ui.login)
+    #ui.cancelar.clicked.connect()
     sys.exit(app.exec_())
