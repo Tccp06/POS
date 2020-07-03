@@ -103,6 +103,7 @@ class Ui_MainWindow(object):
 
         # procesa una unica linea usando el metodo fetchone().
         data = cursor.fetchone()
+        print(data)
 
 #('admin','1234')
 
