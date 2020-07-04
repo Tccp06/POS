@@ -8,7 +8,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
+import InicioAdmin
 
+global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+global db,data
+global usex
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -74,10 +79,13 @@ class Ui_MainWindow(object):
         font.setFamily("Bahnschrift Condensed")
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
-        self.sexo = QtWidgets.QTextEdit(self.centralwidget)
-        self.sexo.setGeometry(QtCore.QRect(130, 300, 171, 31))
-        self.sexo.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.sexo.setObjectName("sexo")
+        self.comboBox = QtWidgets.QComboBox(MainWindow)
+        self.comboBox.setGeometry(QtCore.QRect(130, 300, 171, 31))
+        self.comboBox.setFont(font)
+        self.comboBox.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
         self.label_6 = QtWidgets.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(80, 290, 41, 41))
         font = QtGui.QFont()
@@ -116,7 +124,83 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Apellido</span></p></body></html>"))
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Teléfono</span></p></body></html>"))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Sexo</span></p></body></html>"))
-import logomodificaralmacen_rc
+        self.comboBox.setItemText(0, _translate("MainWindow", "Femenino"))
+        self.comboBox.setItemText(1, _translate("MainWindow", "Masculino"))
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+    def verificar_usuario_existente(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data
+        global usex
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT EmpleadoId FROM empleado  WHERE EmpleadoId=%s"
+        val = (idloc)
+        # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        data = cursor.fetchone()
+
+        if(data==None):
+            usex = 0
+        else:
+            usex = 1
+            db.commit()
+            print("Existente ID")
+
+    def insertar_datos(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        global db, data,usex
+        if(usex!=1):
+            cursor = db.cursor()
+            sql="INSERT INTO empleado (Nombre,Apellido,Telefono,Sexo) VALUES (%s,%s,%s,%s)"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE empleado SET Nombre=%s, Apellido=%s, Telefono=%s, Sexo=%s WHERE EmpleadoId=%s"
+            val = (nombreloc, apellidoloc, telefonoloc, sexoloc,idloc)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
+
+    def tomar_datos(self):
+        global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
+        idloc = ui.id.toPlainText()
+        nombreloc = ui.nombre.toPlainText()
+        apellidoloc = ui.apellido.toPlainText()
+        telefonoloc = ui.telefono.toPlainText()
+        sexoloc = self.comboBox.currentText()
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_usuario_existente()
+        ui.insertar_datos()
+        db.close()
+        ui.regresar_menu()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
@@ -126,4 +210,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

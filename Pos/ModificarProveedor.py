@@ -8,7 +8,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
+import logomodificarproducto
 
+
+global nombreloc, direccionloc, telefonoloc, empresaloc
+global db,data
+global provex,id
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -61,10 +67,10 @@ class Ui_MainWindow(object):
         font.setFamily("Bahnschrift Condensed")
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
-        self.categoria = QtWidgets.QListView(self.centralwidget)
-        self.categoria.setGeometry(QtCore.QRect(140, 220, 191, 31))
-        self.categoria.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.categoria.setObjectName("categoria")
+        self.telefono = QtWidgets.QTextEdit(self.centralwidget)
+        self.telefono.setGeometry(QtCore.QRect(140, 220, 191, 31))
+        self.telefono.setStyleSheet("background-color: rgb(255, 255, 255);\n")
+        self.telefono.setObjectName("telefono")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
         self.label_2.setGeometry(QtCore.QRect(10, -10, 101, 81))
         self.label_2.setStyleSheet("image: url(:/logompr/6df038e0-5ff1-44e3-a6d8-5ab453bee65b_200x200.png);")
@@ -77,14 +83,14 @@ class Ui_MainWindow(object):
         font.setPointSize(8)
         self.label_9.setFont(font)
         self.label_9.setObjectName("label_9")
-        self.proveedor = QtWidgets.QTextEdit(self.centralwidget)
-        self.proveedor.setGeometry(QtCore.QRect(140, 270, 191, 31))
-        self.proveedor.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.proveedor.setObjectName("proveedor")
-        self.descripcion = QtWidgets.QTextEdit(self.centralwidget)
-        self.descripcion.setGeometry(QtCore.QRect(140, 170, 191, 31))
-        self.descripcion.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.descripcion.setObjectName("descripcion")
+        self.empresa = QtWidgets.QTextEdit(self.centralwidget)
+        self.empresa.setGeometry(QtCore.QRect(140, 270, 191, 31))
+        self.empresa.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.empresa.setObjectName("empresa")
+        self.direccion = QtWidgets.QTextEdit(self.centralwidget)
+        self.direccion.setGeometry(QtCore.QRect(140, 170, 191, 31))
+        self.direccion.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.direccion.setObjectName("direccion")
         self.nombre = QtWidgets.QTextEdit(self.centralwidget)
         self.nombre.setGeometry(QtCore.QRect(140, 120, 191, 31))
         self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -111,7 +117,77 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Teléfono</span></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Direccion</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ProveedorID</span></p></body></html>"))
-import logomodificarproducto_rc
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+    def verificar_proveedor_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global idloc,nombreloc, direccionloc, telefonoloc, empresaloc
+        global db, data
+        global provex,id
+
+        cursor = db.cursor()
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT ProveedorId FROM proveedor WHERE ProveedorId=%s"
+        val = (idloc)
+        cursor.execute(sql, val)
+        #myresult = cursor.fetchall()
+        data = cursor.fetchone()
+        if(data==None):
+            provex = 0
+        else:
+            provex = 1
+            #sql ="SELECT EmpleadoId from empleado where "
+            db.commit()
+            id=data
+            print("Existente ID")
+
+    def insertar_dato(self):
+        global idloc,nombreloc, direccionloc, telefonoloc, empresaloc
+        global db, data
+        global provex,id
+        if(provex!=1): #si no existe se creara uno nuevo
+            cursor = db.cursor()
+            sql="INSERT INTO proveedor (Nombre, Direccion, Telefono, Empresa) VALUES (%s,%s,%s,%s)"
+            val = (nombreloc, direccionloc, telefonoloc, empresaloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE proveedor SET Nombre = %s, Direccion = %s, Telefono =%s, Empresa = %s WHERE ProveedorId=%s"
+            val = (nombreloc, direccionloc, telefonoloc, empresaloc,idloc)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
+    def tomar_datos(self):
+        global idloc,nombreloc, direccionloc, telefonoloc, empresaloc
+
+        idloc=ui.id.toPlainText()
+        nombreloc = ui.nombre.toPlainText()
+        direccionloc = ui.direccion.toPlainText()
+        telefonoloc = ui.telefono.toPlainText()
+        empresaloc = ui.empresa.toPlainText()
+
+
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_proveedor_exist()
+        ui.insertar_dato()
+        db.close()
 
 
 if __name__ == "__main__":
@@ -121,4 +197,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

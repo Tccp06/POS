@@ -9,8 +9,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import logomenulistado
 
-class Ui_MainWindow(object):
+class Ui_ListadoMenu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(577, 336)
@@ -109,7 +110,7 @@ class Ui_MainWindow(object):
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.categoria.setText(_translate("MainWindow", "Categoria"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
-import logomenulistado_rc
+
 
 
 if __name__ == "__main__":

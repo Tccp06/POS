@@ -8,9 +8,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import logolistadoalmacen
 
-
-class Ui_MainWindow(object):
+class Ui_ListadoAlmacen(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(739, 600)
@@ -56,7 +56,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.cancelar.setText(_translate("MainWindow", "Ok"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>Productos en almacen</p></body></html>"))
-import logolistadoalmacen_rc
+
 
 
 if __name__ == "__main__":

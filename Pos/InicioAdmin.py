@@ -9,6 +9,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import iniciologo
+import AgregarMenu
+import EditarMenu
+import ListadoMenu
+import ListadoAlmacen
+import EliminarMenu
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -121,7 +127,40 @@ class Ui_Form(object):
         self.modificarProducto.setText(_translate("Form", "Editar"))
         self.inventario.setText(_translate("Form", "Inventario"))
 
+    def menuagregar(self):
+        self.MainWindow = QtWidgets.QMainWindow()
+        self.ui = AgregarMenu.Ui_AgregarMenu()
+        self.ui.setupUi(self.MainWindow)
+        self.MainWindow.show()
+        Form.hide()
 
+    def menueditar(self):
+        self.MainWindow = QtWidgets.QMainWindow()
+        self.ui = EditarMenu.Ui_EditarMenu()
+        self.ui.setupUi(self.MainWindow)
+        self.MainWindow.show()
+        Form.hide()
+
+    def menulistado(self):
+        self.MainWindow = QtWidgets.QMainWindow()
+        self.ui = ListadoMenu.Ui_ListadoMenu()
+        self.ui.setupUi(self.MainWindow)
+        self.MainWindow.show()
+        Form.hide()
+
+    def menuinventario(self):
+        self.MainWindow = QtWidgets.QMainWindow()
+        self.ui = ListadoAlmacen.Ui_ListadoAlmacen()
+        self.ui.setupUi(self.MainWindow)
+        self.MainWindow.show()
+        Form.hide()
+
+    def menueliminar(self):
+        self.MainWindow = QtWidgets.QMainWindow()
+        self.ui = EliminarMenu.Ui_EliminarMenu()
+        self.ui.setupUi(self.MainWindow)
+        self.MainWindow.show()
+        Form.hide()
 
 if __name__ == "__main__":
     import sys
@@ -130,4 +169,9 @@ if __name__ == "__main__":
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
+    ui.agregar.clicked.connect(ui.menuagregar)
+    ui.modificarProducto.clicked.connect(ui.menueditar)
+    ui.listado.clicked.connect(ui.menulistado)
+    ui.inventario.clicked.connect(ui.menuinventario)
+    ui.eliminar.clicked.connect(ui.menueliminar)
     sys.exit(app.exec_())
