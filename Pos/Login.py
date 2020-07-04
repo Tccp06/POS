@@ -13,6 +13,7 @@ import InicioAdmin
 import InicioEmpleado
 import logo
 
+
 global usuario_local
 global contrasena_local
 global db,data
@@ -84,10 +85,6 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Contraseña</span></p></body></html>"))
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
-<<<<<<< HEAD
-#import logo_rc
-=======
->>>>>>> 4536427a4cc3d91afee32180d3ca18cce0da6090
 
     def conectar_bdd(self):
         global db
@@ -110,7 +107,6 @@ class Ui_MainWindow(object):
         print(data)
 
 #('admin','1234')
-
 
     def tomar_datos(self):
         global usuario_local,contrasena_local
@@ -136,19 +132,26 @@ class Ui_MainWindow(object):
     def login(self):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        global data
+        global data,usu
 
         ui.conectar_bdd()
         ui.tomar_datos()
         ui.verificar_usuario()
         if (data!=None):
             if(data=="('admin', '1234')"):
+                ui.funcion(data)
                 ui.abrir_admin()
             else:
+                ui.funcion(data)
                 ui.abrir_empleado()
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))
         db.close()
+
+    def salir(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        sys.exit(app.exec_())
 
 if __name__ == "__main__":
     import sys
@@ -158,5 +161,5 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     ui.ingresar.clicked.connect(ui.login)
-    #ui.cancelar.clicked.connect()
+    ui.cancelar.clicked.connect(ui.salir)
     sys.exit(app.exec_())

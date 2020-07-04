@@ -183,8 +183,6 @@ class Ui_Form(object):
         ui.insertar_datos()
         db.close()
 
-    def cambiar_ventana(self):
-            
 
 
 if __name__ == "__main__":
@@ -195,5 +193,4 @@ if __name__ == "__main__":
     ui.setupUi(Form)
     Form.show()
     ui.agregar.clicked.connect(ui.llamar_a_las_demas)
-    ui.
     sys.exit(app.exec_())

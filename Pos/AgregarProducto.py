@@ -8,7 +8,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
+import logoproducto
+import InicioAdmin
 
+global nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
+global db,data
+global prodex,id
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -35,10 +41,17 @@ class Ui_Form(object):
         self.precioUnitarioCompra.setGeometry(QtCore.QRect(190, 360, 191, 31))
         self.precioUnitarioCompra.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.precioUnitarioCompra.setObjectName("precioUnitarioCompra")
-        self.categoria = QtWidgets.QListView(Form)
+        self.categoria = QtWidgets.QComboBox(Form)
         self.categoria.setGeometry(QtCore.QRect(190, 210, 191, 31))
         self.categoria.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.categoria.setObjectName("categoria")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
+        self.categoria.addItem("")
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(30, 100, 141, 41))
         font = QtGui.QFont()
@@ -110,7 +123,115 @@ class Ui_Form(object):
         self.label_8.setText(_translate("Form", "<html><head/><body><p><span style=\" font-size:12pt;\">Precio Unitario Compra</span></p></body></html>"))
         self.agregar.setText(_translate("Form", "Agregar"))
         self.cancelar.setText(_translate("Form", "Cancelar"))
-import logoproducto_rc
+        self.categoria.setItemText(1,_translate("Form","Abarrotes"))
+        self.categoria.setItemText(2,_translate("Form","Enlatados"))
+        self.categoria.setItemText(3,_translate("Form","Lacteos"))
+        self.categoria.setItemText(4,_translate("Form","Botanas"))
+        self.categoria.setItemText(5,_translate("Form","Cofinterias"))
+        self.categoria.setItemText(6,_translate("Form","Harinas"))
+        self.categoria.setItemText(7,_translate("Form","Frutas y verduras"))
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom
+        global db, data
+        global prodex,id
+
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT ProductoId FROM producto WHERE Nombre = %s AND Descripcion = %s AND CategoriaId=%s AND ProveedorId =%s AND PrecioUnitarioVenta = %s AND PrecioUnitarioCompra = %s"
+        val = (nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom)
+
+        cursor.execute(sql, val)
+
+        #myresult = cursor.fetchall()
+        data = cursor.fetchone()
+
+        if(data==None):
+            prodex = 0
+        else:
+            prodex = 1
+            #sql ="SELECT EmpleadoId from empleado where "
+            db.commit()
+            id=data
+            print("Existente ID")
+
+
+    def insertar_dato(self):
+
+        global nombreloc, descripcionloc, categorialoc, proveedorloc, preciounven, preciouncom
+        global db, data
+        global prodex,id
+
+        if(prodex!=1): #si no existe se creara uno nuevo
+            cursor = db.cursor()
+            sql="INSERT INTO producto (Nombre, Descripcion, CategoriaId,ProveedorId, PrecioUnitarioVenta, PrecioUnitarioCompra) VALUES (%s,%s,%s,%s,%s,%s)"
+            val = (nombreloc, descripcionloc,categorialoc, proveedorloc, preciounven, preciouncom)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+            ui.regresar_menu()
+        else:
+            cursor = db.cursor()
+            sql="UPDATE producto SET Nombre = %s AND Descripcion = %s AND CategoriaId=%s AND ProveedorId =%s AND PrecioUnitarioVenta = %s AND PrecioUnitarioCompra = %s WHERE ProductoId=%s"
+            val = (nombreloc, descripcionloc,categorialoc, proveedorloc, preciounven,  preciouncom, id)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+            ui.regresar_menu()
+
+    def tomar_datos(self):
+        global nombreloc, descripcionloc, categorialoc,proveedorloc, preciounven, preciouncom
+
+        nombreloc = ui.nombre.toPlainText()
+        descripcionloc = ui.descripcion.toPlainText()
+        categorialoc = ui.categoria.currentText()
+        proveedorloc = ui.proveedor.toPlainText()
+        preciounven = ui.precioUnitarioVenta.toPlainText()
+        preciouncom = ui.precioUnitarioVenta.toPlainText()
+
+    def categoria_dato(self):
+        global categorialoc,db
+
+        cursor2 = db.cursor()
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT CategoriaId FROM categoria WHERE Nombre = %s"
+        val = (categorialoc)
+        cursor2.execute(sql,val)
+        data=cursor2.fetchone()
+        categorialoc=data
+
+
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.categoria_dato()
+        ui.verificar_producto_exist()
+        ui.insertar_dato()
+        db.close()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        Form.hide()
+
 
 
 if __name__ == "__main__":
@@ -120,4 +241,5 @@ if __name__ == "__main__":
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

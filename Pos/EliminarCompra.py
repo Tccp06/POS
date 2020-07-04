@@ -8,6 +8,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import pymysql
+import logoeliminarempleado
+import InicioEmpleado
+
+global id
+global db,data
+
 
 
 class Ui_MainWindow(object):
@@ -78,7 +85,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID de compra</span></p></body></html>"))
         self.agregar.setText(_translate("MainWindow", "Buscar"))
         self.eliminar.setText(_translate("MainWindow", "Eliminar"))
-#import logoeliminarempleado_rc
+
 
 
 if __name__ == "__main__":

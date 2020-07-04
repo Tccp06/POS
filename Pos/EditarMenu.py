@@ -9,8 +9,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import logoeditarmenu
 
-class Ui_MainWindow(object):
+
+class Ui_EditarMenu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(523, 351)
@@ -102,7 +104,7 @@ class Ui_MainWindow(object):
         self.proveedor.setText(_translate("MainWindow", "Proveedor"))
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
-import logoeditarmenu_rc
+
 
 
 if __name__ == "__main__":

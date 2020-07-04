@@ -8,7 +8,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import pymysql
+import logomodificaralmacen
+import InicioAdmin
+global idloc,cantidadloc
+global db,data
+global alex
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -84,7 +89,90 @@ class Ui_MainWindow(object):
         self.agregar.setText(_translate("MainWindow", "Actualizar"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Actualizar productos en almacen</span></p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Cantidad</span></p></body></html>"))
-import logomodificaralamacen_rc
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+    def verificar_almacen_existente(self):
+        global idloc,cantidadloc
+        global db, data
+        global alex
+
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT ProductoId FROM almacen  WHERE ProductoId=%s"
+        val = (idloc)
+        # procesa una unica linea usando el metodo fetchone().
+        cursor.execute(sql, val)
+
+        data = cursor.fetchone()
+
+        if(data==None):
+            alex = 0
+        else:
+            alex = 1
+            db.commit()
+            print("Existente ID")
+
+    def insertar_datos(self):
+        global idloc,cantidadloc
+        global db, data,usex
+        if(alex!=1):
+            cursor = db.cursor()
+            sql="INSERT INTO almacen (ProductoId,CantidadProducto) VALUES (%s,%s)"
+            val = (idloc,cantidadloc)
+            cursor.execute(sql,val)
+            data = cursor.fetchone()
+            db.commit()
+            print(cursor.rowcount, "record inserted.")
+        else:
+            cursor = db.cursor()
+            sql="UPDATE almacen SET ProductoId=%s, CantidadProducto=%s WHERE ProductoId=%s"
+            val = (idloc,cantidadloc,idloc)
+            cursor.execute(sql,val)
+            db.commit()
+            data = cursor.fetchone()
+
+            print("Actualizado")
+
+
+    def tomar_datos(self):
+        global idloc,cantidadloc
+        idloc = ui.id.toPlainText()
+        cantidadloc = ui.cantidad.toPlainText()
+
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_almacen_existente()
+        ui.insertar_datos()
+        db.close()
+        ui.regresar_menu()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
+    sys.exit(app.exec_())
+
 
 
 if __name__ == "__main__":
