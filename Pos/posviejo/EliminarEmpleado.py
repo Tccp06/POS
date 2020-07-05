@@ -96,7 +96,7 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">ID</span></p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:18pt;\">Nombre</span></p></body></html>"))
         self.cancelar.setText(_translate("MainWindow", "Atrás"))
-import logoeliminarcompra_rc
+#import logoeliminarcompra_rc
 
 
 if __name__ == "__main__":
