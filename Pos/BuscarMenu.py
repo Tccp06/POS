@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+<<<<<<< HEAD
 import InicioAdmin
 import logobuscarmenu
 import BuscarEmpleado
@@ -16,6 +17,11 @@ import BuscarProducto
 import BuscarProveedor
 
 class Ui_BuscarMenu(object):
+=======
+from PyQt5.QtWidgets import QTableWidgetItem
+
+class Ui_MainWindow(object):
+>>>>>>> 9a937dfaa111a77d0f8f2f12a43984c5fb71ff80
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(601, 357)
@@ -36,6 +42,26 @@ class Ui_BuscarMenu(object):
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         font.setPointSize(14)
+
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
+        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 8pt \"Bahnschrift Condensed\";")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        item.setFont(font)
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        MainWindow.setCentralWidget(self.centralwidget)
+
+
         self.empleado.setFont(font)
         self.empleado.setStyleSheet("background-color: rgb(255, 230, 109);")
         self.empleado.setObjectName("empleado")
@@ -134,6 +160,72 @@ class Ui_BuscarMenu(object):
         self.ui.setupUi(self.almacenMenu)
         self.almacenMenu.show()
 
+
+
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "CompraId"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Fecha"))
+
+#import logobuscarmenu_rc
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def tomar_datos(self):
+        global idLocal
+
+        idLocal = ui.ID.toPlainText()
+
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global idLocal, data
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT CompraId, ProductoId, CantidadProducto, NumeroDeArticulos, Total FROM detallecompra WHERE CompraId = %s"
+        val = (idLocal)
+
+        cursor.execute(sql, val)
+        data = cursor.fetchone()
+
+        if(data==None):
+            prodex = 0
+            print("Esta compra nunca fue hecha")
+            print(data)
+        else:
+            prodex = 1
+            db.commit()
+            idLocal=data
+            print("Ahi stan los datos")
+
+    def datos_tabla(self):
+        global datos, data
+        self.datos = []
+        self.datos.append((data))
+
+    def agregar_datos_tabla(self):
+        global datos, tableWidget
+        fila = 0
+        for registro in self.datos:
+            columna = 0
+            ui.tableWidget.insertRow(fila)
+            for elemento in registro:
+                celda = QTableWidgetItem(elemento)
+                ui.tableWidget.setItem(fila,columna,celda)
+                columna+=1
+            fila +=1
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_producto_exist()
+        ui.datos_tabla()
+        ui.agregar_datos_tabla()
 
 
 

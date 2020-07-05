@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import logomenuEliminar
+import logomenueliminar
 
 class Ui_EliminarMenu(object):
     def setupUi(self, MainWindow):

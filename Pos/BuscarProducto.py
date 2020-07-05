@@ -8,8 +8,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
+from PyQt5.QtWidgets import QTableWidgetItem
+global idLocal, nombreLoc
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -23,6 +23,26 @@ class Ui_MainWindow(object):
         font.setFamily("Bahnschrift Condensed")
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
+
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
+        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 8pt \"Bahnschrift Condensed\";")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        item.setFont(font)
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        MainWindow.setCentralWidget(self.centralwidget)
+
+
         self.tableView = QtWidgets.QTableView(self.centralwidget)
         self.tableView.setGeometry(QtCore.QRect(50, 200, 451, 211))
         self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -79,7 +99,83 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID de producto</span></p></body></html>"))
         self.agregar.setText(_translate("MainWindow", "Buscar"))
         self.cancelar.setText(_translate("MainWindow", "Atrás"))
-import logoproductobuscar_rc
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "ProductoId"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Nombre"))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "Descripcion"))
+        item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "CategoriaId"))
+        item = self.tableWidget.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "ProveedorId"))
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "PrecioUnitarioVenta"))
+        item = self.tableWidget.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "PrecioUnitarioCompra"))
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+
+    def tomar_datos(self):
+        global idLocal, nombreLoc
+
+        idLocal = ui.ID.toPlainText()
+        nombreLoc = ui.nombre.toPlainText()
+
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global idLocal, data
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT ProductoId, Nombre, Descripcion, CategoriaId, ProveedorId, PrecioUnitarioVenta, PrecioUnitarioCompra  FROM producto WHERE ProductoId = %s OR Nombre = %s"
+        val = (idLocal, nombreLoc)
+
+        cursor.execute(sql, val)
+        data = cursor.fetchone()
+
+        if(data==None):
+            prodex = 0
+            print("Esta compra nunca fue hecha")
+            print(data)
+        else:
+            prodex = 1
+            db.commit()
+            idLocal=data
+            print("Ahi stan los datos")
+        
+    def datos_tabla(self):
+        global datos, data
+        self.datos = []
+        self.datos.append((data))
+
+    def agregar_datos_tabla(self):
+        global datos, tableWidget
+        fila = 0
+        for registro in self.datos:
+            columna = 0
+            ui.tableWidget.insertRow(fila)
+            for elemento in registro:
+                celda = QTableWidgetItem(elemento)
+                ui.tableWidget.setItem(fila,columna,celda)
+                columna+=1
+            fila +=1
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_producto_exist()
+        ui.datos_tabla()
+        ui.agregar_datos_tabla()
+   
+
+#import logoproductobuscar_rc
 
 
 if __name__ == "__main__":
@@ -89,4 +185,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())
