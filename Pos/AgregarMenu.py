@@ -10,6 +10,10 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import logomenuagregar
+import InicioAdmin
+import AgregarProducto
+import AgregarProveedor
+import RegistroEmpleado
 
 class Ui_AgregarMenu(object):
     def setupUi(self, MainWindow):
@@ -85,14 +89,45 @@ class Ui_AgregarMenu(object):
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
+        self.regresar.clicked.connect(self.regresar_menu)
+        self.empleado.clicked.connect(self.empleado_agregar)
+        self.producto.clicked.connect(self.producto_agregar)
+        self.producto_2.clicked.connect(self.proveedor_agregar)
 
+    def regresar_menu(self):
+        self.AdminMenu = QtWidgets.QMainWindow()
+        self.ui = InicioAdmin.Ui_InicioAdmin()
+        self.ui.setupUi(self.AdminMenu)
+        self.AdminMenu.show()
+        MainWindow.hide()
+
+    def empleado_agregar(self):
+        self.agregarEmpleado = QtWidgets.QMainWindow()
+        self.ui = RegistroEmpleado.Ui_RegistroEmpleado()
+        self.ui.setupUi(self.agregarEmpleado )
+        self.agregarEmpleado.show()
+        #MainWindow.hide()
+
+    def producto_agregar(self):
+        self.agregarProducto = QtWidgets.QMainWindow()
+        self.ui = AgregarProducto.Ui_AgregarProducto()
+        self.ui.setupUi(self.agregarProducto)
+        self.agregarProducto.show()
+        #MainWindow.hide()
+
+    def proveedor_agregar(self):
+        self.agregarProveedor = QtWidgets.QMainWindow()
+        self.ui = AgregarProveedor.Ui_AgregarProveedor()
+        self.ui.setupUi(self.agregarProveedor)
+        self.agregarProveedor.show()
+        #MainWindow.hide()
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_AgregarMenu()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

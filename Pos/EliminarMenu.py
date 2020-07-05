@@ -90,7 +90,7 @@ class Ui_EliminarMenu(object):
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.proveedor.setText(_translate("MainWindow", "Proveedor"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p>Buscar</p></body></html>"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p>Eliminar</p></body></html>"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
 
 
@@ -99,7 +99,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_EliminarMenu()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

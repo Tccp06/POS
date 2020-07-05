@@ -18,7 +18,7 @@ global db,data
 global id
 import logoeliminarcompra
 
-class Ui_MainWindow(object):
+class Ui_EliminarEmpleado(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(767, 587)
@@ -122,6 +122,8 @@ class Ui_MainWindow(object):
 
     def datos_tabla(self):
         global datos,data
+        if(data==None):
+            data="No existe"
         self.datos = []
         self.datos.append((data))
 
@@ -138,15 +140,30 @@ class Ui_MainWindow(object):
             fila +=1
 
     def eliminar_registro(self):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        global db, data,id
-        ui.tomar_datos()
+        global db, data, id
+
         cursor = db.cursor()
-        sql = "DELETE FROM empleado WHERE EmpleadoId = %s"
-        val = (id)
-        cursor.execute(sql, val)
+        sql="DELETE FROM empleado WHERE EmpleadoId = %s"
+        cursor.execute(sql,(id))
+        db.commit()
+        print(id)
+        # procesa una unica linea usando el metodo fetchone().
         data = cursor.fetchone()
+        #cursor.execute(sql, val)
+        print("Row eliminado")
+        data = cursor.fetchone()
+
+
+
+    def eliminar_cosas(self):
+        global id
+        print ("Botoneliminar")
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        print(id)
+        ui.eliminar_registro()
+        db.close()
+
 
 
     def verificar_producto_exist(self):
@@ -154,20 +171,24 @@ class Ui_MainWindow(object):
         #o se mostrara una advertencia al usuario del caso.
         global db, data
         global id
-
-        cursor = db.cursor()
-        # ejecuta el SQL query usando el metodo execute().
-        sql = "SELECT Nombre,Apellido,Sexo FROM empleado WHERE EmpleadoId = %s"
-        val = (id)
-        cursor.execute(sql, val)
-        #myresult = cursor.fetchall()
-        data = cursor.fetchone()
-
+        try:
+            cursor = db.cursor()
+            # ejecuta el SQL query usando el metodo execute().
+            sql = "SELECT Nombre,Apellido,Sexo FROM empleado WHERE EmpleadoId = %s"
+            val = (id)
+            cursor.execute(sql, val)
+            #myresult = cursor.fetchall()
+            data = cursor.fetchone()
+            if(data==none):
+                data="No existe"
+        except Exception as ex:
+            print("Exception occured: %s"%ex)
     def tomar_datos(self):
         global id
         id = ui.ID.toPlainText()
 
     def llamar_a_las_demas(self):
+        global data
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         ui.conectar_bdd()
@@ -176,16 +197,22 @@ class Ui_MainWindow(object):
         ui.datos_tabla()
         ui.agregar_datos_tabla()
 
-
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_EliminarEmpleado()
     ui.setupUi(MainWindow)
     MainWindow.show()
     ui.agregar.clicked.connect(ui.llamar_a_las_demas)
-    ui.eliminar.clicked.connect(ui.eliminar_registro)
+    ui.eliminar.clicked.connect(ui.eliminar_cosas)
+    ui.cancelar.clicked.connect(ui.regresar_menu)
     sys.exit(app.exec_())

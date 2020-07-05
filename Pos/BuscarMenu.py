@@ -8,24 +8,29 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import InicioAdmin
+import logobuscarmenu
+import BuscarEmpleado
+import BuscarCompra
+import BuscarProducto
+import BuscarProveedor
 
-
-class Ui_MainWindow(object):
+class Ui_BuscarMenu(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(601, 357)
         MainWindow.setStyleSheet("background-color: rgb(247, 255, 247);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.categoria = QtWidgets.QPushButton(self.centralwidget)
-        self.categoria.setGeometry(QtCore.QRect(230, 70, 121, 51))
-        font = QtGui.QFont()
-        font.setFamily("Bahnschrift Condensed")
-        font.setPointSize(14)
-        self.categoria.setFont(font)
-        self.categoria.setStyleSheet("background-color: rgb(255, 230, 109);\n"
-"")
-        self.categoria.setObjectName("categoria")
+#         self.categoria = QtWidgets.QPushButton(self.centralwidget)
+#         self.categoria.setGeometry(QtCore.QRect(230, 70, 121, 51))
+#         font = QtGui.QFont()
+#         font.setFamily("Bahnschrift Condensed")
+#         font.setPointSize(14)
+#         self.categoria.setFont(font)
+#         self.categoria.setStyleSheet("background-color: rgb(255, 230, 109);\n"
+# "")
+#         self.categoria.setObjectName("categoria")
         self.empleado = QtWidgets.QPushButton(self.centralwidget)
         self.empleado.setGeometry(QtCore.QRect(150, 150, 121, 51))
         font = QtGui.QFont()
@@ -99,6 +104,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+    #def __init__(self,MainWindow):
+        #global MainWindow
+        #MainWindowAnterior = MainWindow
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -110,14 +119,29 @@ class Ui_MainWindow(object):
         self.proveedor.setText(_translate("MainWindow", "Proveedor"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>Buscar</p></body></html>"))
         self.compras.setText(_translate("MainWindow", "Compras"))
-import logobuscarmenu_rc
+        self.regresar.clicked.connect(self.regresar_menu)
+
+    def regresar_menu(self):
+        self.AdminMenu = QtWidgets.QMainWindow()
+        self.ui = InicioAdmin.Ui_InicioAdmin()
+        self.ui.setupUi(self.AdminMenu)
+        self.AdminMenu.show()
+        #MainWindow.hide()
+
+    def almacen_agregar(self):
+        self.almacenMenu = QtWidgets.QMainWindow()
+        self.ui = BuscarAlmacen.Ui_BuscarAlmacen()
+        self.ui.setupUi(self.almacenMenu)
+        self.almacenMenu.show()
+
+
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    buscarMenu = QtWidgets.QMainWindow()
+    ui = Ui_BuscarMenu()
+    ui.setupUi(buscarMenu)
+    buscarMenu.show()
     sys.exit(app.exec_())
