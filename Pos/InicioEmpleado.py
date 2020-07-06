@@ -10,6 +10,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import logoinicio2
 import Vender
+import AgregarMenu
+import EditarMenu
+import ListadoMenu
+import ListadoAlmacen
+import EliminarMenu
+import BuscarMenu
+import Login
+
 
 
 class Ui_MainWindowEmpleado(object):
@@ -130,7 +138,63 @@ class Ui_MainWindowEmpleado(object):
         self.ventaProducto.setText(_translate("MainWindow", "Vender"))
         self.buscar.setText(_translate("MainWindow", "Buscar "))
         self.cerrarCaja.setText(_translate("MainWindow", "Menu"))
+        self.agregar.clicked.connect(self.menuagregar)
+        self.modificarProducto.clicked.connect(self.menueditar)
+        self.listado.clicked.connect(self.menulistado)
+        self.inventario.clicked.connect(self.menuinventario)
+        self.eliminar.clicked.connect(self.menueliminar)
+        self.buscar.clicked.connect(self.menubuscar)
+        self.cerrarCaja.clicked.connect(self.login)
 
+    def menuagregar(self):
+        self.agregarMenu = QtWidgets.QMainWindow()
+        self.ui = AgregarMenu.Ui_AgregarMenu()
+        self.ui.setupUi(self.agregarMenu)
+        self.agregarMenu.show()
+        #MainWindow.hide()
+
+    def menueditar(self):
+        self.editarMenu = QtWidgets.QMainWindow()
+        self.ui = EditarMenu.Ui_EditarMenu()
+        self.ui.setupUi(self.editarMenu)
+        self.editarMenu.show()
+        #MainWindow.hide()
+
+    def menulistado(self):
+        self.listadoMenu = QtWidgets.QMainWindow()
+        self.ui = ListadoMenu.Ui_ListadoMenu()
+        self.ui.setupUi(self.listadoMenu)
+        self.listadoMenu.show()
+        #MainWindow.hide()
+
+    def menuinventario(self):
+        self.inventarioMenu = QtWidgets.QMainWindow()
+        self.ui = ListadoAlmacen.Ui_ListadoAlmacen()
+        self.ui.setupUi(self.inventarioMenu)
+        self.inventarioMenu.show()
+        #MainWindow.hide()
+
+    def menueliminar(self):
+        self.eliminarMenu = QtWidgets.QMainWindow()
+        self.ui = EliminarMenu.Ui_EliminarMenu()
+        self.ui.setupUi(self.eliminarMenu)
+        self.eliminarMenu.show()
+        #MainWindow.hide()
+
+    def menubuscar(self):
+        self.buscarMenu = QtWidgets.QMainWindow()
+        self.ui = BuscarMenu.Ui_BuscarMenu()
+        self.ui.setupUi(self.buscarMenu)
+        self.buscarMenu.show()
+        #MainWindow.hide()
+
+    def login(self):
+        self.log = QtWidgets.QMainWindow()
+        self.ui = Login.Ui_Login()
+        self.ui.setupUi(self.log)
+        self.log.show()
+        MainWindow.hide()
+        
     def vender(self):
         self.MainWindow3 = QtWidgets.QMainWindow()
         self.ui =Vender.Ui_VenderWindow()

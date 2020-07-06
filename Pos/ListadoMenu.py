@@ -10,12 +10,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import logomenulistado
-# import ListadoAlmacen
-# import ListadoCategoria
-# import ListadoCompras
-# import ListadoEmpleado
-# import ListadoProductos
-# import ListadoProveedor
+import ListadoAlmacen
+import ListadoCategoria
+import ListadoCompras
+import ListadoEmpleado
+import ListadoProductos
+import ListadoProveedor
 
 class Ui_ListadoMenu(object):
     def setupUi(self, MainWindow):
@@ -123,41 +123,41 @@ class Ui_ListadoMenu(object):
         self.categoria.clicked.connect(self.categoria_listado)
         self.empleado.clicked.connect(self.empleado_listado)
 
-    # def producto_listado(self):
-    #     self.listadoProducto = QtWidgets.QMainWindow()
-    #     self.ui = ListadoProductos.Ui_ListadoProducto()
-    #     self.ui.setupUi(self.listadoProducto)
-    #     self.listadoProducto.show()
-    #
-    # def proveedor_listado(self):
-    #     self.listadoProducto = QtWidgets.QMainWindow()
-    #     self.ui = ListadoProveedor.Ui_ListadoProveedor()
-    #     self.ui.setupUi(self.listadoProveedor)
-    #     self.listadoProveedor.show()
-    #
-    # def almacen_listado(self):
-    #     self.ListadoAlmacen = QtWidgets.QMainWindow()
-    #     self.ui = ListadoAlmacen.Ui_ListadoAlmacen()
-    #     self.ui.setupUi(self.listadoAlmacen)
-    #     self.listadoAlmacen.show()
-    #
-    # def compras_listado(self):
-    #     self.listadoCompra = QtWidgets.QMainWindow()
-    #     self.ui = ListadoCompras.Ui_ListadoCompras()
-    #     self.ui.setupUi(self.listadoCompra)
-    #     self.listadoCompra.show()
-    #
-    # def categoria_listado(self):
-    #     self.listadoCategoria = QtWidgets.QMainWindow()
-    #     self.ui = ListadoCategoria.Ui_ListadoCategoria()
-    #     self.ui.setupUi(self.listadoCategoria)
-    #     self.listadoCategoria.show()
-    #
-    # def empleado_listado(self):
-    #     self.listadoEmpleado = QtWidgets.QMainWindow()
-    #     self.ui = ListadoEmpleado.Ui_ListadoEmpleado()
-    #     self.ui.setupUi(self.listadoEmpleado)
-    #     self.listadoEmpleado.show()
+    def producto_listado(self):
+        self.listadoProducto = QtWidgets.QMainWindow()
+        self.ui = ListadoProductos.Ui_ListadoProducto()
+        self.ui.setupUi(self.listadoProducto)
+        self.listadoProducto.show()
+    
+    def proveedor_listado(self):
+        self.listadoProducto = QtWidgets.QMainWindow()
+        self.ui = ListadoProveedor.Ui_ListadoProveedor()
+        self.ui.setupUi(self.listadoProveedor)
+        self.listadoProveedor.show()
+    
+    def almacen_listado(self):
+        self.ListadoAlmacen = QtWidgets.QMainWindow()
+        self.ui = ListadoAlmacen.Ui_ListadoAlmacen()
+        self.ui.setupUi(self.ListadoAlmacen)
+        self.ListadoAlmacen.show()
+    
+    def compras_listado(self):
+        self.listadoCompra = QtWidgets.QMainWindow()
+        self.ui = ListadoCompras.Ui_ListadoCompras()
+        self.ui.setupUi(self.listadoCompra)
+        self.listadoCompra.show()
+    
+    def categoria_listado(self):
+        self.listadoCategoria = QtWidgets.QMainWindow()
+        self.ui = ListadoCategoria.Ui_ListadoCategoria()
+        self.ui.setupUi(self.listadoCategoria)
+        self.listadoCategoria.show()
+    
+    def empleado_listado(self):
+        self.listadoEmpleado = QtWidgets.QMainWindow()
+        self.ui = ListadoEmpleado.Ui_ListadoEmpleado()
+        self.ui.setupUi(self.listadoEmpleado)
+        self.listadoEmpleado.show()
 
 
 if __name__ == "__main__":

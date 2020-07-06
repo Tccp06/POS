@@ -8,7 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import logomenuEliminar
+import logomenueliminar
 
 import EliminarEmpleado
 import EliminarProducto

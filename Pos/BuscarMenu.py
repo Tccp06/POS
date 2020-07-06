@@ -9,21 +9,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import logobuscarmenu
-# import BuscarCompra
-# import BuscarProducto
-# import BuscarEmpleado
-# import BuscarProveedor
+import BuscarCompra
+import BuscarProducto
+import BuscarEmpleado
+import BuscarProveedor
 
 class Ui_BuscarMenu(object):
-<<<<<<< HEAD
-=======
-from PyQt5.QtWidgets import QTableWidgetItem
-import pymysql 
-
-class Ui_MainWindow(object):
->>>>>>> 9a937dfaa111a77d0f8f2f12a43984c5fb71ff80
-=======
->>>>>>> 3c540a3dc179c5ea6c46e64ac6e8f3b3ba217bc6
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(601, 357)
@@ -113,34 +104,34 @@ class Ui_MainWindow(object):
         self.proveedor.setText(_translate("MainWindow", "Proveedor"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>Buscar</p></body></html>"))
         self.compras.setText(_translate("MainWindow", "Compras"))
-        # self.empleado.clicked.connect(self.empleado_buscar)
-        # self.almacen_2.clicked.connect(self.almacen_buscar)
-        # self.proveedor.clicked.connect(self.proveedor_buscar)
-        # self.producto.clicked.connect(self.producto_buscar)
+        self.empleado.clicked.connect(self.empleado_buscar)
+        self.almacen_2.clicked.connect(self.almacen_buscar)
+        self.proveedor.clicked.connect(self.proveedor_buscar)
+        self.producto.clicked.connect(self.producto_buscar)
 
-    # def empleado_buscar(self):
-    #     self.buscarEmpleado = QtWidgets.QMainWindow()
-    #     self.ui = BuscarEmpleado.Ui_BuscarEmpleado()
-    #     self.ui.setupUi(self.buscarEmpleado)
-    #     self.buscarEmpleado.show()
-    #
-    # def almacen_buscar(self):
-    #     self.buscarAlmacen = QtWidgets.QMainWindow()
-    #     self.ui = BuscarAlmacen.Ui_BuscarAlmacen()
-    #     self.ui.setupUi(self.buscarAlmacen)
-    #     self.buscarAlmacen.show()
-    #
-    # def proveedor_buscar(self):
-    #     self.buscarProveedor = QtWidgets.QMainWindow()
-    #     self.ui = BuscarProveedor.Ui_BuscarProveedor()
-    #     self.ui.setupUi(self.buscarProveedor)
-    #     self.buscarProveedor.show()
-    #
-    # def producto_buscar(self):
-    #     self.buscarProducto = QtWidgets.QMainWindow()
-    #     self.ui = BuscarProducto .Ui_BuscarProducto ()
-    #     self.ui.setupUi(self.buscarProducto )
-    #     self.buscarProducto .show()
+    def empleado_buscar(self):
+        self.buscarEmpleado = QtWidgets.QMainWindow()
+        self.ui = BuscarEmpleado.Ui_BuscarEmpleado()
+        self.ui.setupUi(self.buscarEmpleado)
+        self.buscarEmpleado.show()
+    
+    def almacen_buscar(self):
+        self.buscarAlmacen = QtWidgets.QMainWindow()
+        self.ui = BuscarAlmacen.Ui_BuscarAlmacen()
+        self.ui.setupUi(self.buscarAlmacen)
+        self.buscarAlmacen.show()
+    
+    def proveedor_buscar(self):
+        self.buscarProveedor = QtWidgets.QMainWindow()
+        self.ui = BuscarProveedor.Ui_BuscarProveedor()
+        self.ui.setupUi(self.buscarProveedor)
+        self.buscarProveedor.show()
+    
+    def producto_buscar(self):
+        self.buscarProducto = QtWidgets.QMainWindow()
+        self.ui = BuscarProducto .Ui_BuscarProducto ()
+        self.ui.setupUi(self.buscarProducto )
+        self.buscarProducto .show()
 
 
 
