@@ -6,9 +6,11 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import logoproveedorbuscar
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
+import pymysql
+import InicioEmpleado
 
 global idLocal, nombreloc
 
@@ -36,10 +38,31 @@ class Ui_MainWindow(object):
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(40, 200, 521, 192))
-        self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableView.setObjectName("tableView")
+
+        # self.tableView = QtWidgets.QTableView(self.centralwidget)
+        # self.tableView.setGeometry(QtCore.QRect(40, 200, 521, 192))
+        # self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
+        # self.tableView.setObjectName("tableView")
+
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 411, 192))
+        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 8pt \"Bahnschrift Condensed\";")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(5)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+
         self.nombre = QtWidgets.QTextEdit(self.centralwidget)
         self.nombre.setGeometry(QtCore.QRect(150, 140, 191, 31))
         self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
@@ -64,18 +87,7 @@ class Ui_MainWindow(object):
         self.label_2.setText("")
         self.label_2.setObjectName("label_2")
 
-        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
-        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"font: 8pt \"Bahnschrift Condensed\";")
-        self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
+        
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         item.setFont(font)
@@ -112,9 +124,9 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Telefono"))
         item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Empresa"))
+        self.cancelar.clicked.connect(ui.other)
         
-        
-#import logoproveedorbuscar_rc
+
 
     def conectar_bdd(self):
         global db
@@ -163,6 +175,7 @@ class Ui_MainWindow(object):
             columna = 0
             ui.tableWidget.insertRow(fila)
             for elemento in registro:
+                elemento = str(elemento)
                 celda = QTableWidgetItem(elemento)
                 ui.tableWidget.setItem(fila,columna,celda)
                 columna+=1
@@ -175,6 +188,13 @@ class Ui_MainWindow(object):
         ui.verificar_producto_exist()
         ui.datos_tabla()
         ui.agregar_datos_tabla()
+     #Abrir otra ventana
+    def other(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        MainWindow.hide()
 
 if __name__ == "__main__":
     import sys

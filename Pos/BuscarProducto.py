@@ -6,10 +6,15 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+import logoproductobuscar
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
+import InicioEmpleado
+import pymysql
+
 global idLocal, nombreLoc
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -25,28 +30,40 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName("label_3")
 
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
+        self.tableWidget.setGeometry(QtCore.QRect(150, 200, 303, 211))
         self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 8pt \"Bahnschrift Condensed\";")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(6, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         item.setFont(font)
-        self.tableWidget.setHorizontalHeaderItem(2, item)
         MainWindow.setCentralWidget(self.centralwidget)
 
 
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(50, 200, 451, 211))
-        self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableView.setObjectName("tableView")
+        # self.tableView = QtWidgets.QTableView(self.centralwidget)
+        # self.tableView.setGeometry(QtCore.QRect(50, 200, 451, 211))
+        # self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
+        # self.tableView.setObjectName("tableView")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setGeometry(QtCore.QRect(30, 80, 101, 41))
         font = QtGui.QFont()
@@ -99,21 +116,30 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID de producto</span></p></body></html>"))
         self.agregar.setText(_translate("MainWindow", "Buscar"))
         self.cancelar.setText(_translate("MainWindow", "Atrás"))
+
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "ProductoId"))
+
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Nombre"))
+
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Descripcion"))
+
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "CategoriaId"))
+
         item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "ProveedorId"))
+
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "PrecioUnitarioVenta"))
+
         item = self.tableWidget.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "PrecioUnitarioCompra"))
 
+        self.agregar.clicked.connect(ui.llamar_a_las_demas)
+        self.cancelar.clicked.connect(ui.other)
     def conectar_bdd(self):
         global db
         ############### CONFIGURAR ESTO ###################
@@ -161,6 +187,7 @@ class Ui_MainWindow(object):
             columna = 0
             ui.tableWidget.insertRow(fila)
             for elemento in registro:
+                elemento = str(elemento)
                 celda = QTableWidgetItem(elemento)
                 ui.tableWidget.setItem(fila,columna,celda)
                 columna+=1
@@ -173,9 +200,13 @@ class Ui_MainWindow(object):
         ui.verificar_producto_exist()
         ui.datos_tabla()
         ui.agregar_datos_tabla()
-   
-
-#import logoproductobuscar_rc
+    #Abrir otra ventana
+    def other(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
@@ -185,5 +216,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

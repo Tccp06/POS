@@ -118,7 +118,7 @@ class Ui_MainWindow(object):
         global db
         ############### CONFIGURAR ESTO ###################
         # Abre conexion con la base de datos
-        db = pymysql.connect("localhost","root","","pos2")
+        db = pymysql.connect("localhost","root","","pos")
 
     def datos_tabla(self):
         global datos,data

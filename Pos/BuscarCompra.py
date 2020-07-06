@@ -6,10 +6,11 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import logobuscarcompra
 from PyQt5 import QtCore, QtGui, QtWidgets
-import pymysql
 from PyQt5.QtWidgets import QTableWidgetItem
+import pymysql
+import InicioEmpleado
 
 global idLocal
 global db, data, datos
@@ -37,10 +38,10 @@ class Ui_MainWindow(object):
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
 
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(40, 140, 521, 231))
-        self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableView.setObjectName("tableView")
+        # self.tableView = QtWidgets.QTableView(self.centralwidget)
+        # self.tableView.setGeometry(QtCore.QRect(40, 140, 521, 231))
+        # self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
+        # self.tableView.setObjectName("tableView")
 
         self.agregar = QtWidgets.QPushButton(self.centralwidget)
         self.agregar.setGeometry(QtCore.QRect(350, 80, 111, 41))
@@ -53,16 +54,26 @@ class Ui_MainWindow(object):
         self.agregar.setObjectName("agregar")
 
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
+        self.tableWidget.setGeometry(QtCore.QRect(150, 150, 231, 192))
         self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 8pt \"Bahnschrift Condensed\";")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(6, item)
         item = QtWidgets.QTableWidgetItem()
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
@@ -101,11 +112,24 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID de compra</span></p></body></html>"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "CompraId"))
-        item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Fecha"))
-        
 
-#import logobuscarcompra_rc
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "ProductoId"))
+
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "CantidadProducto"))
+
+        item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "NumeroDeArticulos"))
+
+        item = self.tableWidget.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "Total"))
+
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "Fecha"))
+
+        self.agregar.clicked.connect(ui.llamar_a_las_demas)
+        self.cancelar.clicked.connect(ui.other)
 
     def conectar_bdd(self):
         global db
@@ -127,7 +151,7 @@ class Ui_MainWindow(object):
         # ejecuta el SQL query usando el metodo execute().
         sql = "SELECT CompraId, ProductoId, CantidadProducto, NumeroDeArticulos, Total FROM detallecompra WHERE CompraId = %s"
         val = (idLocal)
-
+        #SELECT Fecha FROM compra WHERE CompraId = %s
         cursor.execute(sql, val)
         data = cursor.fetchone()
 
@@ -153,6 +177,7 @@ class Ui_MainWindow(object):
             columna = 0
             ui.tableWidget.insertRow(fila)
             for elemento in registro:
+                elemento = str(elemento)
                 celda = QTableWidgetItem(elemento)
                 ui.tableWidget.setItem(fila,columna,celda)
                 columna+=1
@@ -166,6 +191,14 @@ class Ui_MainWindow(object):
         ui.datos_tabla()
         ui.agregar_datos_tabla()
 
+#Abrir otra ventana
+    def other(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        MainWindow.hide()
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -173,5 +206,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

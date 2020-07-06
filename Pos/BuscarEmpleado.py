@@ -6,9 +6,11 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-
+import logoeliminarempleado
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTableWidgetItem
+import pymysql
+import InicioEmpleado
 
 global idLocal, nombreLoc
 global db, data, datos
@@ -52,17 +54,30 @@ class Ui_MainWindow(object):
         self.agregar.setObjectName("agregar")
 
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 631, 192))
+        self.tableWidget.setGeometry(QtCore.QRect(50, 210, 510, 192)) #40, 210, 501, 192
         self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "font: 8pt \"Bahnschrift Condensed\";")
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(3)
+        self.tableWidget.setColumnCount(5)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
+
         self.tableWidget.setHorizontalHeaderItem(0, item)
         item = QtWidgets.QTableWidgetItem()
+
         self.tableWidget.setHorizontalHeaderItem(1, item)
         item = QtWidgets.QTableWidgetItem()
+
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+    
+
         font = QtGui.QFont()
         font.setFamily("Bahnschrift Condensed")
         item.setFont(font)
@@ -76,10 +91,10 @@ class Ui_MainWindow(object):
 "background-color: rgb(213, 28, 28);\n"
 "font: 16pt \"Bahnschrift Condensed\";")
         self.cancelar.setObjectName("cancelar")
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(40, 210, 501, 192))
-        self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableView.setObjectName("tableView")
+        # self.tableView = QtWidgets.QTableView(self.centralwidget)
+        # self.tableView.setGeometry(QtCore.QRect(40, 210, 501, 192))
+        # self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
+        # self.tableView.setObjectName("tableView")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 639, 26))
@@ -107,11 +122,12 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Apellido"))
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("MainWindow", "Telefono"))
+        #print(type(_translate("MainWindow", "Telefono")))
         item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Sexo"))
+        self.cancelar.clicked.connect(ui.other)
         
-        
-#import logoeliminarempleado_rc
+
     def conectar_bdd(self):
         global db
         ############### CONFIGURAR ESTO ###################
@@ -131,7 +147,7 @@ class Ui_MainWindow(object):
         cursor = db.cursor()
 
         # ejecuta el SQL query usando el metodo execute().
-        sql = "SELECT EmpleadoId, Nombre, Apellido, Telefono, Sexo FROM empleado WHERE CompraId = %s OR Nombre = %s"
+        sql = "SELECT EmpleadoId, Nombre, Apellido, Telefono, Sexo FROM empleado WHERE EmpleadoId = %s OR Nombre = %s"
         val = (idLocal, nombreLoc)
 
         cursor.execute(sql, val)
@@ -140,12 +156,12 @@ class Ui_MainWindow(object):
         if(data==None):
             prodex = 0
             print("Esta compra nunca fue hecha")
-            print(data)
         else:
             prodex = 1
             db.commit()
             idLocal=data
             print("Ahi stan los datos")
+            print(type(data))
         
     def datos_tabla(self):
         global datos, data
@@ -159,6 +175,7 @@ class Ui_MainWindow(object):
             columna = 0
             ui.tableWidget.insertRow(fila)
             for elemento in registro:
+                elemento = str(elemento)
                 celda = QTableWidgetItem(elemento)
                 ui.tableWidget.setItem(fila,columna,celda)
                 columna+=1
@@ -171,6 +188,13 @@ class Ui_MainWindow(object):
         ui.verificar_producto_exist()
         ui.datos_tabla()
         ui.agregar_datos_tabla()
+     #Abrir otra ventana
+    def other(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        MainWindow.hide()
 
 
 if __name__ == "__main__":
