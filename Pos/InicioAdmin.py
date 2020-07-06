@@ -180,7 +180,7 @@ class Ui_InicioAdmin(object):
         self.ui = Login.Ui_Login()
         self.ui.setupUi(self.log)
         self.log.show()
-        #MainWindow.hide()
+        MainWindow.hide()
 
 if __name__ == "__main__":
     import sys

@@ -8,7 +8,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import logomenueliminar
+import logomenuEliminar
+
+import EliminarEmpleado
+import EliminarProducto
+import EliminarProveedor
+
 
 class Ui_EliminarMenu(object):
     def setupUi(self, MainWindow):
@@ -92,6 +97,27 @@ class Ui_EliminarMenu(object):
         self.empleado.setText(_translate("MainWindow", "Empleado"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p>Eliminar</p></body></html>"))
         self.regresar.setText(_translate("MainWindow", "Regresar"))
+        self.producto.clicked.connect(self.producto_eliminar)
+        self.proveedor.clicked.connect(self.proveedor_eliminar)
+        self.empleado.clicked.connect(self.empleado_eliminar)
+
+    def producto_eliminar(self):
+         self.eliminarProducto = QtWidgets.QMainWindow()
+         self.ui = EliminarProducto.Ui_EliminarProducto()
+         self.ui.setupUi(self.eliminarProducto)
+         self.eliminarProducto.show()
+
+    def proveedor_eliminar(self):
+         self.eliminarProveedor = QtWidgets.QMainWindow()
+         self.ui = EliminarProveedor.Ui_EliminarProveedor()
+         self.ui.setupUi(self.eliminarProveedor)
+         self.eliminarProveedor.show()
+
+    def empleado_eliminar(self):
+         self.eliminarEmpleado = QtWidgets.QMainWindow()
+         self.ui = EliminarEmpleado.Ui_EliminarEmpleado()
+         self.ui.setupUi(self.eliminarEmpleado)
+         self.eliminarEmpleado.show()
 
 
 

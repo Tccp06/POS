@@ -16,7 +16,7 @@ global idloc,nombreloc, descripcionloc, proveedorloc, preciounven, preciouncom
 global db,data
 global prodex,id
 
-class Ui_MainWindow(object):
+class Ui_ModificarProducto(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(466, 600)
@@ -150,6 +150,7 @@ class Ui_MainWindow(object):
         self.categoria.setItemText(5,_translate("Form","Cofinterias"))
         self.categoria.setItemText(6,_translate("Form","Harinas"))
         self.categoria.setItemText(7,_translate("Form","Frutas y verduras"))
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
 
     def conectar_bdd(self):
         global db
@@ -214,13 +215,13 @@ class Ui_MainWindow(object):
     def tomar_datos(self):
         global idloc,nombreloc, descripcionloc, categorialoc,proveedorloc, preciounven, preciouncom
 
-        idloc= ui.id.toPlainText()
-        nombreloc = ui.nombre.toPlainText()
-        descripcionloc = ui.descripcion.toPlainText()
-        categorialoc = ui.categoria.currentText()
-        proveedorloc = ui.proveedor.toPlainText()
-        preciounven = ui.precioUnitarioVenta.toPlainText()
-        preciouncom = ui.precioUnitarioVenta.toPlainText()
+        idloc= self.id.toPlainText()
+        nombreloc = self.nombre.toPlainText()
+        descripcionloc = self.descripcion.toPlainText()
+        categorialoc = self.categoria.currentText()
+        proveedorloc = self.proveedor.toPlainText()
+        preciounven = self.precioUnitarioVenta.toPlainText()
+        preciouncom = self.precioUnitarioVenta.toPlainText()
 
     def categoria_dato(self):
         global categorialoc,db
@@ -235,13 +236,11 @@ class Ui_MainWindow(object):
 
 
     def llamar_a_las_demas(self):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.categoria_dato()
-        ui.verificar_producto_exist()
-        ui.insertar_dato()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.categoria_dato()
+        self.verificar_producto_exist()
+        self.insertar_dato()
         db.close()
 
 
@@ -253,5 +252,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

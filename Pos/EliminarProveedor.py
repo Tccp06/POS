@@ -8,6 +8,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QTableWidgetItem
 import pymysql
 import logoeliminarproveedor
 import InicioAdmin
@@ -17,7 +18,7 @@ global db,data
 global id
 
 
-class Ui_MainWindow(object):
+class Ui_EliminarProveedor(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(558, 600)
@@ -112,6 +113,9 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Direccio"))
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Empresa"))
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
+        self.eliminar.clicked.connect(self.eliminar_cosas)
+        #ui.cancelar.clicked.connect(ui.regresar_menu)
 
     def conectar_bdd(self):
         global db
@@ -131,10 +135,10 @@ class Ui_MainWindow(object):
         fila = 0
         for registro in self.datos:
             columna = 0
-            ui.tableWidget.insertRow(fila)
+            self.tableWidget.insertRow(fila)
             for elemento in registro:
                 celda = QTableWidgetItem(elemento)
-                ui.tableWidget.setItem(fila,columna,celda)
+                self.tableWidget.setItem(fila,columna,celda)
                 columna+=1
             fila +=1
 
@@ -157,9 +161,9 @@ class Ui_MainWindow(object):
     def eliminar_cosas(self):
         global id
 
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.eliminar_registro()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.eliminar_registro()
         db.close()
 
 
@@ -181,33 +185,22 @@ class Ui_MainWindow(object):
 
     def tomar_datos(self):
         global id
-        id = ui.ID.toPlainText()
+        id = self.ID.toPlainText()
 
     def llamar_a_las_demas(self):
         global data
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.verificar_producto_exist()
-        ui.datos_tabla()
-        ui.agregar_datos_tabla()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.verificar_producto_exist()
+        self.datos_tabla()
+        self.agregar_datos_tabla()
 
-    def regresar_menu(self):
-        self.Form = QtWidgets.QWidget()
-        self.ui = InicioAdmin.Ui_Form()
-        self.ui.setupUi(self.Form)
-        self.Form.show()
-        MainWindow.hide()
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_EliminarProveedor()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
-    ui.eliminar.clicked.connect(ui.eliminar_cosas)
-    ui.cancelar.clicked.connect(ui.regresar_menu)
     sys.exit(app.exec_())

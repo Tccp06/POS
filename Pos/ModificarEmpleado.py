@@ -15,7 +15,7 @@ global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
 global db,data
 global usex
 
-class Ui_MainWindow(object):
+class Ui_ModificarEmpleado(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(415, 542)
@@ -126,6 +126,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Sexo</span></p></body></html>"))
         self.comboBox.setItemText(0, _translate("MainWindow", "Femenino"))
         self.comboBox.setItemText(1, _translate("MainWindow", "Masculino"))
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
 
     def conectar_bdd(self):
         global db
@@ -179,36 +180,33 @@ class Ui_MainWindow(object):
 
     def tomar_datos(self):
         global idloc,nombreloc, apellidoloc, telefonoloc, sexoloc
-        idloc = ui.id.toPlainText()
-        nombreloc = ui.nombre.toPlainText()
-        apellidoloc = ui.apellido.toPlainText()
-        telefonoloc = ui.telefono.toPlainText()
+        idloc = self.id.toPlainText()
+        nombreloc = self.nombre.toPlainText()
+        apellidoloc = self.apellido.toPlainText()
+        telefonoloc = self.telefono.toPlainText()
         sexoloc = self.comboBox.currentText()
 
     def llamar_a_las_demas(self):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.verificar_usuario_existente()
-        ui.insertar_datos()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.verificar_usuario_existente()
+        self.insertar_datos()
         db.close()
-        ui.regresar_menu()
+        #self.regresar_menu()
 
-    def regresar_menu(self):
-        self.Form = QtWidgets.QWidget()
-        self.ui = InicioAdmin.Ui_Form()
-        self.ui.setupUi(self.Form)
-        self.Form.show()
-        MainWindow.hide()
+    # def regresar_menu(self):
+    #     self.Form = QtWidgets.QWidget()
+    #     self.ui = InicioAdmin.Ui_Form()
+    #     self.ui.setupUi(self.Form)
+    #     self.Form.show()
+    #     MainWindow.hide()
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_ModificarEmpleado()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())
