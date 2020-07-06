@@ -379,11 +379,11 @@ class Ui_VenderWindow(object):
             fila +=1
         ui.total.clear()    
         ui.total.insertPlainText(str(aux))  
-        if r != True:
-                ui.recibido.insertPlainText(str(0))    
-                r = ui.recibido.toPlainText()
-                r = float(r)
-                ui.cambio.insertPlainText(str(recibido-aux))     
+        # if r != True:
+        #         ui.recibido.insertPlainText(str(0))    
+        #         r = ui.recibido.toPlainText()
+        #         r = float(r)
+        #         ui.cambio.insertPlainText(str(recibido-aux))     
             
     def eliminarProducto(self):
         global datos, tableWidget
