@@ -8,7 +8,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from PyQt5.QtWidgets import QTableWidgetItem
+import pymysql
+import InicioEmpleado
 
 class Ui_VenderWindow(object):
     def setupUi(self, MainWindow):
@@ -43,6 +45,24 @@ class Ui_VenderWindow(object):
         self.tableView.setGeometry(QtCore.QRect(300, 20, 451, 211))
         self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.tableView.setObjectName("tableView")
+
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(300, 20, 451, 211))
+        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+"font: 8pt \"Bahnschrift Condensed\";")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(4)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+
         self.agregar = QtWidgets.QPushButton(self.centralwidget)
         self.agregar.setGeometry(QtCore.QRect(100, 190, 81, 41))
         font = QtGui.QFont()
@@ -68,10 +88,12 @@ class Ui_VenderWindow(object):
         font.setFamily("Bahnschrift Condensed")
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
+
         self.total = QtWidgets.QTextEdit(self.centralwidget)
         self.total.setEnabled(False)
         self.total.setGeometry(QtCore.QRect(380, 250, 171, 31))
         self.total.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+
 "font: 9pt \"Bahnschrift Condensed\";")
         self.total.setObjectName("total")
         self.pagar = QtWidgets.QPushButton(self.centralwidget)
@@ -241,6 +263,9 @@ class Ui_VenderWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        global aux, r
+        r = 0
+        aux = 0
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ID producto</span></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Nombre</span></p></body></html>"))
         self.agregar.setText(_translate("MainWindow", "Agregar"))
@@ -264,7 +289,136 @@ class Ui_VenderWindow(object):
         self.btn_borrar.setText(_translate("MainWindow", "x"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
         self.cancelar_2.setText(_translate("MainWindow", "Nueva venta"))
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "Cantidad"))
 
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Producto"))
+
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "PrecioUnitario"))
+
+        item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "PrecioTotal"))
+
+        self.cancelar.clicked.connect(self.inicioEmpleado)
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
+        self.eliminar.clicked.connect(self.eliminarProducto)
+        self.cancelar_2.clicked.connect(self.nuevaVenta)
+
+        #Numeros
+        #self.btn_punto.clicked.connect(self.recibido.insertPlainText('.'))
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos")
+    
+    def tomar_datos(self):
+        global idLocal, nombreloc, cantidad
+
+        idLocal = ui.id_producto.toPlainText()
+        nombreloc = ui.nombre_producto.toPlainText()
+        cantidad = ui.cantidad.toPlainText()
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global idLocal, nombreloc, data
+        cursor = db.cursor()
+
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT Nombre, PrecioUnitarioVenta FROM producto WHERE ProductoId = %s OR Nombre = %s"
+        val = (idLocal, nombreloc)
+
+        cursor.execute(sql, val)
+        data = cursor.fetchone()
+
+        if(data==None):
+            prodex = 0
+            print("No existe producto ya")
+            print(data)
+        else:
+            prodex = 1
+            db.commit()
+            idLocal=data
+        
+    def datos_tabla(self):
+        global datos, data
+        self.datos = []
+        self.datos.append((data))
+
+    def agregar_datos_tabla(self):
+        global datos, tableWidget
+        global fila, cantidad 
+        fila = 0
+        total = 0
+        global aux 
+        global r
+        for registro in self.datos:
+            columna = 1
+            ui.tableWidget.insertRow(fila)
+            for elemento in registro: 
+                #insertar cantidad de productos    
+                cant = QTableWidgetItem(cantidad)
+                ui.tableWidget.setItem(fila,0,cant)
+                if columna == 2:
+                        #insertar precio total del producto
+                        elemento = float(elemento)
+                        cantidad = float(cantidad)
+                        total = elemento * cantidad
+                        aux += total
+                        strTotal = str(total)
+                        t = QTableWidgetItem(strTotal)
+                        ui.tableWidget.setItem(fila,3,t) 
+                #insertar desde la bdd
+                elemento = str(elemento)
+                celda = QTableWidgetItem(elemento)
+                ui.tableWidget.setItem(fila,columna,celda)
+                columna+=1  
+                
+            fila +=1
+        ui.total.clear()    
+        ui.total.insertPlainText(str(aux))  
+        if r != True:
+                ui.recibido.insertPlainText(str(0))    
+                r = ui.recibido.toPlainText()
+                r = float(r)
+                ui.cambio.insertPlainText(str(recibido-aux))     
+            
+    def eliminarProducto(self):
+        global datos, tableWidget
+#         fila = ui.tableWidget.currentRow
+#         ui.tableWidget.removeRow(fila)  
+        filaActual = ui.tableWidget.currentRow()
+        print(filaActual)
+        ui.tableWidget.removeRow(filaActual)
+    
+    def nuevaVenta(self):
+        global tableWidget
+        ui.tableWidget.clearContents()
+        ui.tableWidget.setRowCount(0)
+               
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_producto_exist()
+        ui.datos_tabla()
+        ui.agregar_datos_tabla()
+
+    def validarAgregarProducto(self):
+            pass
+   
+    #Boton cancelar
+    def inicioEmpleado(self):
+        self.MainWindow2 = QtWidgets.QMainWindow()
+        self.ui = InicioEmpleado.Ui_MainWindowEmpleado()
+        self.ui.setupUi(self.MainWindow2)
+        self.MainWindow2.show()
+        #MainWindow.hide()
+   
 
 if __name__ == "__main__":
     import sys

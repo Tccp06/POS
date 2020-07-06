@@ -138,14 +138,15 @@ class Ui_MainWindowEmpleado(object):
         self.ventaProducto.setText(_translate("MainWindow", "Vender"))
         self.buscar.setText(_translate("MainWindow", "Buscar "))
         self.cerrarCaja.setText(_translate("MainWindow", "Menu"))
+        
         self.agregar.clicked.connect(self.menuagregar)
         self.modificarProducto.clicked.connect(self.menueditar)
         self.listado.clicked.connect(self.menulistado)
-        self.inventario.clicked.connect(self.menuinventario)
+        self.inventario_2.clicked.connect(self.menuinventario)
         self.eliminar.clicked.connect(self.menueliminar)
         self.buscar.clicked.connect(self.menubuscar)
         self.cerrarCaja.clicked.connect(self.login)
-
+        self.ventaProducto.clicked.connect(self.vender)
     def menuagregar(self):
         self.agregarMenu = QtWidgets.QMainWindow()
         self.ui = AgregarMenu.Ui_AgregarMenu()
@@ -193,14 +194,14 @@ class Ui_MainWindowEmpleado(object):
         self.ui = Login.Ui_Login()
         self.ui.setupUi(self.log)
         self.log.show()
-        MainWindow.hide()
+        #MainWindow.hide()
         
     def vender(self):
         self.MainWindow3 = QtWidgets.QMainWindow()
         self.ui =Vender.Ui_VenderWindow()
         self.ui.setupUi(self.MainWindow3)
         self.MainWindow3.show()
-        MainWindow.hide()
+        #MainWindow.hide()
 
 
 if __name__ == "__main__":
@@ -210,5 +211,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindowEmpleado()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.ventaProducto.clicked.connect(ui.vender)
     sys.exit(app.exec_())
