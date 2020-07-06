@@ -10,6 +10,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import logoeditarmenu
+import InicioAdmin
 
 
 class Ui_EditarMenu(object):

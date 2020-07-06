@@ -13,12 +13,11 @@ import InicioAdmin
 import InicioEmpleado
 import logo
 
-
 global usuario_local
 global contrasena_local
 global db,data
 
-class Ui_MainWindow(object):
+class Ui_Login(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(468, 344)
@@ -85,6 +84,8 @@ class Ui_MainWindow(object):
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:16pt;\">Contraseña</span></p></body></html>"))
         self.ingresar.setText(_translate("MainWindow", "Ingresar"))
         self.cancelar.setText(_translate("MainWindow", "Cancelar"))
+        self.ingresar.clicked.connect(self.login)
+        self.cancelar.clicked.connect(self.salir)
 
     def conectar_bdd(self):
         global db
@@ -115,10 +116,10 @@ class Ui_MainWindow(object):
         contrasena_local = ui.contrasena.text()
 
     def abrir_admin(self):
-        self.Form = QtWidgets.QWidget()
-        self.ui = InicioAdmin.Ui_Form()
-        self.ui.setupUi(self.Form)
-        self.Form.show()
+        self.AdminMenu = QtWidgets.QMainWindow()
+        self.ui = InicioAdmin.Ui_InicioAdmin()
+        self.ui.setupUi(self.AdminMenu)
+        self.AdminMenu.show()
         MainWindow.hide()
 
     def abrir_empleado(self):
@@ -138,11 +139,9 @@ class Ui_MainWindow(object):
         ui.tomar_datos()
         ui.verificar_usuario()
         if (data!=None):
-            if(data=="('admin', '1234')"):
-                ui.funcion(data)
+            if(data[0]=='admin'):
                 ui.abrir_admin()
             else:
-                ui.funcion(data)
                 ui.abrir_empleado()
         else:
             ui.label.setText(_translate("MainWindow","incorrecto"))
@@ -157,9 +156,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_Login()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.ingresar.clicked.connect(ui.login)
-    ui.cancelar.clicked.connect(ui.salir)
     sys.exit(app.exec_())

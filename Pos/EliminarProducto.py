@@ -8,9 +8,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import logobuscarcompra
+from PyQt5.QtWidgets import QTableWidgetItem
+import pymysql
+import logoproducto
+import InicioAdmin
 
+global db,data
+global id
 
-class Ui_MainWindow(object):
+class Ui_EliminarProducto(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(568, 554)
@@ -56,10 +63,21 @@ class Ui_MainWindow(object):
         self.nombre.setGeometry(QtCore.QRect(150, 130, 191, 31))
         self.nombre.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.nombre.setObjectName("nombre")
-        self.tableView = QtWidgets.QTableView(self.centralwidget)
-        self.tableView.setGeometry(QtCore.QRect(20, 180, 521, 192))
-        self.tableView.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.tableView.setObjectName("tableView")
+        self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setGeometry(QtCore.QRect(20, 180, 521, 192))
+        self.tableWidget.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(2)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        font = QtGui.QFont()
+        font.setFamily("Bahnschrift Condensed")
+        item.setFont(font)
+        self.tableWidget.setHorizontalHeaderItem(2, item)
         self.eliminar = QtWidgets.QPushButton(self.centralwidget)
         self.eliminar.setGeometry(QtCore.QRect(370, 390, 141, 41))
         font = QtGui.QFont()
@@ -88,14 +106,109 @@ class Ui_MainWindow(object):
         self.cancelar.setText(_translate("MainWindow", "Atrás"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Nombre</span></p></body></html>"))
         self.eliminar.setText(_translate("MainWindow", "Eliminar"))
-import logobuscarcompra_rc
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "Nombre"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Descripcion"))
+
+
+    def conectar_bdd(self):
+        global db
+        ############### CONFIGURAR ESTO ###################
+        # Abre conexion con la base de datos
+        db = pymysql.connect("localhost","root","","pos2")
+
+    def datos_tabla(self):
+        global datos,data
+        self.datos = []
+        self.datos.append((data))
+
+    def agregar_datos_tabla(self):
+        global datos, tableWidget
+        fila = 0
+        for registro in self.datos:
+            columna = 0
+            ui.tableWidget.insertRow(fila)
+            for elemento in registro:
+                celda = QTableWidgetItem(elemento)
+                ui.tableWidget.setItem(fila,columna,celda)
+                columna+=1
+            fila +=1
+
+    def eliminar_registro(self):
+        global db, data, id
+
+        cursor = db.cursor()
+        sql="DELETE FROM producto WHERE ProductoId = %s"
+        cursor.execute(sql, (id,))
+        print(id)
+        # procesa una unica linea usando el metodo fetchone().
+        data = cursor.fetchone()
+        #cursor.execute(sql, val)
+        print("Row eliminado")
+        db.commit()
+
+
+
+
+    def eliminar_cosas(self):
+        global id
+        print ("Botoneliminar")
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        print(id)
+        ui.eliminar_registro()
+        db.close()
+
+
+
+    def verificar_producto_exist(self):
+        #se verificara que los parametros que paso el usuario no existan ya en la bdd y si es asi solo se actualizaran
+        #o se mostrara una advertencia al usuario del caso.
+        global db, data
+        global id
+
+        cursor = db.cursor()
+        # ejecuta el SQL query usando el metodo execute().
+        sql = "SELECT Nombre,Descripcion FROM producto WHERE ProductoId = %s"
+        val = (id)
+        cursor.execute(sql, val)
+        #myresult = cursor.fetchall()
+        data = cursor.fetchone()
+
+
+    def tomar_datos(self):
+        global id
+        id = ui.ID.toPlainText()
+
+    def llamar_a_las_demas(self):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        ui.conectar_bdd()
+        ui.tomar_datos()
+        ui.verificar_producto_exist()
+        ui.datos_tabla()
+        ui.agregar_datos_tabla()
+
+    def regresar_menu(self):
+        self.Form = QtWidgets.QWidget()
+        self.ui = InicioAdmin.Ui_Form()
+        self.ui.setupUi(self.Form)
+        self.Form.show()
+        MainWindow.hide()
+
+
+
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = Ui_EliminarProducto()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
+    ui.eliminar.clicked.connect(ui.eliminar_cosas)
+    ui.cancelar.clicked.connect(ui.regresar_menu)
     sys.exit(app.exec_())

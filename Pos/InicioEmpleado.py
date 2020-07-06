@@ -8,9 +8,9 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-import Vender
 import logoinicio2
+import Vender
+
 
 class Ui_MainWindowEmpleado(object):
     def setupUi(self, MainWindow):

@@ -170,7 +170,6 @@ class Ui_MainWindow(object):
             cursor.execute(sql,val)
             db.commit()
             data = cursor.fetchone()
-
             print("Actualizado")
 
     def tomar_datos(self):
