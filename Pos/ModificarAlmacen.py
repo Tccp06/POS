@@ -15,7 +15,7 @@ global idloc,cantidadloc
 global db,data
 global alex
 
-class Ui_MainWindow(object):
+class Ui_ModificarAlmacen(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(474, 345)
@@ -89,6 +89,7 @@ class Ui_MainWindow(object):
         self.agregar.setText(_translate("MainWindow", "Actualizar"))
         self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:20pt;\">Actualizar productos en almacen</span></p></body></html>"))
         self.label_3.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Cantidad</span></p></body></html>"))
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
 
     def conectar_bdd(self):
         global db
@@ -142,38 +143,24 @@ class Ui_MainWindow(object):
 
     def tomar_datos(self):
         global idloc,cantidadloc
-        idloc = ui.id.toPlainText()
-        cantidadloc = ui.cantidad.toPlainText()
+        idloc = self.id.toPlainText()
+        cantidadloc = self.cantidad.toPlainText()
 
 
     def llamar_a_las_demas(self):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.verificar_almacen_existente()
-        ui.insertar_datos()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.verificar_almacen_existente()
+        self.insertar_datos()
         db.close()
-        ui.regresar_menu()
+        #ui.regresar_menu()
 
-    def regresar_menu(self):
-        self.Form = QtWidgets.QWidget()
-        self.ui = InicioAdmin.Ui_Form()
-        self.ui.setupUi(self.Form)
-        self.Form.show()
-        MainWindow.hide()
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
-    sys.exit(app.exec_())
-
-
+    # def regresar_menu(self):
+    #     self.Form = QtWidgets.QWidget()
+    #     self.ui = InicioAdmin.Ui_Form()
+    #     self.ui.setupUi(self.Form)
+    #     self.Form.show()
+        #MainWindow.hide()
 
 if __name__ == "__main__":
     import sys

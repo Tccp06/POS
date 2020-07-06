@@ -10,6 +10,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import logomenulistado
+# import ListadoAlmacen
+# import ListadoCategoria
+# import ListadoCompras
+# import ListadoEmpleado
+# import ListadoProductos
+# import ListadoProveedor
 
 class Ui_ListadoMenu(object):
     def setupUi(self, MainWindow):
@@ -110,7 +116,48 @@ class Ui_ListadoMenu(object):
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.categoria.setText(_translate("MainWindow", "Categoria"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
+        self.proveedor.clicked.connect(self.proveedor_listado)
+        self.almacen_2.clicked.connect(self.almacen_listado)
+        self.compras.clicked.connect(self.compras_listado)
+        self.producto.clicked.connect(self.producto_listado)
+        self.categoria.clicked.connect(self.categoria_listado)
+        self.empleado.clicked.connect(self.empleado_listado)
 
+    # def producto_listado(self):
+    #     self.listadoProducto = QtWidgets.QMainWindow()
+    #     self.ui = ListadoProductos.Ui_ListadoProducto()
+    #     self.ui.setupUi(self.listadoProducto)
+    #     self.listadoProducto.show()
+    #
+    # def proveedor_listado(self):
+    #     self.listadoProducto = QtWidgets.QMainWindow()
+    #     self.ui = ListadoProveedor.Ui_ListadoProveedor()
+    #     self.ui.setupUi(self.listadoProveedor)
+    #     self.listadoProveedor.show()
+    #
+    # def almacen_listado(self):
+    #     self.ListadoAlmacen = QtWidgets.QMainWindow()
+    #     self.ui = ListadoAlmacen.Ui_ListadoAlmacen()
+    #     self.ui.setupUi(self.listadoAlmacen)
+    #     self.listadoAlmacen.show()
+    #
+    # def compras_listado(self):
+    #     self.listadoCompra = QtWidgets.QMainWindow()
+    #     self.ui = ListadoCompras.Ui_ListadoCompras()
+    #     self.ui.setupUi(self.listadoCompra)
+    #     self.listadoCompra.show()
+    #
+    # def categoria_listado(self):
+    #     self.listadoCategoria = QtWidgets.QMainWindow()
+    #     self.ui = ListadoCategoria.Ui_ListadoCategoria()
+    #     self.ui.setupUi(self.listadoCategoria)
+    #     self.listadoCategoria.show()
+    #
+    # def empleado_listado(self):
+    #     self.listadoEmpleado = QtWidgets.QMainWindow()
+    #     self.ui = ListadoEmpleado.Ui_ListadoEmpleado()
+    #     self.ui.setupUi(self.listadoEmpleado)
+    #     self.listadoEmpleado.show()
 
 
 if __name__ == "__main__":

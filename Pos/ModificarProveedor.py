@@ -16,7 +16,7 @@ global nombreloc, direccionloc, telefonoloc, empresaloc
 global db,data
 global provex,id
 
-class Ui_MainWindow(object):
+class Ui_ModificarProveedor(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(456, 521)
@@ -117,6 +117,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Teléfono</span></p></body></html>"))
         self.label_4.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">Direccion</span></p></body></html>"))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:12pt;\">ProveedorID</span></p></body></html>"))
+        self.agregar.clicked.connect(self.llamar_a_las_demas)
 
     def conectar_bdd(self):
         global db
@@ -172,21 +173,19 @@ class Ui_MainWindow(object):
     def tomar_datos(self):
         global idloc,nombreloc, direccionloc, telefonoloc, empresaloc
 
-        idloc=ui.id.toPlainText()
-        nombreloc = ui.nombre.toPlainText()
-        direccionloc = ui.direccion.toPlainText()
-        telefonoloc = ui.telefono.toPlainText()
-        empresaloc = ui.empresa.toPlainText()
+        idloc=self.id.toPlainText()
+        nombreloc = self.nombre.toPlainText()
+        direccionloc = self.direccion.toPlainText()
+        telefonoloc = self.telefono.toPlainText()
+        empresaloc = self.empresa.toPlainText()
 
 
 
     def llamar_a_las_demas(self):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        ui.conectar_bdd()
-        ui.tomar_datos()
-        ui.verificar_proveedor_exist()
-        ui.insertar_dato()
+        self.conectar_bdd()
+        self.tomar_datos()
+        self.verificar_proveedor_exist()
+        self.insertar_dato()
         db.close()
 
 
@@ -197,5 +196,4 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
-    ui.agregar.clicked.connect(ui.llamar_a_las_demas)
     sys.exit(app.exec_())

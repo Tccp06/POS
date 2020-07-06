@@ -11,6 +11,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 import logoeditarmenu
 import InicioAdmin
+import ModificarAcceso
+import ModificarAlmacen
+import ModificarEmpleado
+import ModificarProducto
+import ModificarProveedor
 
 
 class Ui_EditarMenu(object):
@@ -105,6 +110,43 @@ class Ui_EditarMenu(object):
         self.proveedor.setText(_translate("MainWindow", "Proveedor"))
         self.producto.setText(_translate("MainWindow", "Producto"))
         self.empleado.setText(_translate("MainWindow", "Empleado"))
+        self.almacen.clicked.connect(self.editar_almacen)
+        self.acceso.clicked.connect(self.editar_acceso)
+        self.empleado.clicked.connect(self.editar_empleado)
+        self.producto.clicked.connect(self.editar_producto)
+        self.proveedor.clicked.connect(self.editar_proveedor)
+        
+
+
+    def editar_almacen(self):
+        self.editarAlmacen = QtWidgets.QMainWindow()
+        self.ui = ModificarAlmacen.Ui_ModificarAlmacen()
+        self.ui.setupUi(self.editarAlmacen)
+        self.editarAlmacen.show()
+
+    def editar_acceso(self):
+        self.editarAcceso = QtWidgets.QMainWindow()
+        self.ui = ModificarAcceso.Ui_ModificarAcceso()
+        self.ui.setupUi(self.editarAcceso)
+        self.editarAcceso.show()
+
+    def editar_empleado(self):
+        self.editarEmpleado = QtWidgets.QMainWindow()
+        self.ui = ModificarEmpleado.Ui_ModificarEmpleado()
+        self.ui.setupUi(self.editarEmpleado)
+        self.editarEmpleado.show()
+
+    def editar_producto(self):
+        self.editarProducto = QtWidgets.QMainWindow()
+        self.ui = ModificarProducto.Ui_ModificarProducto()
+        self.ui.setupUi(self.editarProducto)
+        self.editarProducto.show()
+
+    def editar_proveedor(self):
+        self.editarProveedor = QtWidgets.QMainWindow()
+        self.ui = ModificarProveedor.Ui_ModificarProveedor()
+        self.ui.setupUi(self.editarProveedor)
+        self.editarProveedor.show()
 
 
 
